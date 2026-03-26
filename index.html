@@ -5,58 +5,47 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DealOptima — AI-Powered F&I Intelligence Platform</title>
-<meta name="description" content="Score every lender simultaneously. Structure every deal correctly. Know your exact reserve before you ever hit submit. The F&I desk just got an unfair advantage.">
-<meta property="og:title" content="DealOptima — F&I Intelligence Platform">
-<meta property="og:description" content="Score every lender. Structure every deal. Know your reserve — to the dollar.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://dealoptima.com">
+<meta name="description" content="Score every lender simultaneously. Structure every deal correctly. Know your exact reserve before you ever hit submit.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><polygon points='50,0 100,25 100,75 50,100 0,75 0,25' fill='%23D4A843'/><text x='50' y='62' text-anchor='middle' font-size='36' font-weight='900' fill='%23030712' font-family='sans-serif'>DO</text></svg>">
-<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-<script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-</head>
-<body style="margin:0;padding:0;background:#060A10">
-<div id="root"></div>
-<script type="text/babel">
-const { useState, useEffect, useRef, useMemo } = React;
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+::selection{background:rgba(212,168,67,0.3);color:#fff}
+body{background:#060A10;color:#F0F4FF;font-family:'DM Sans',-apple-system,sans-serif;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
 
-// DealOptima — Production SaaS Website
-// Mirrors pitch deck flow. Dark luxury F&I theme.
+:root{
+–bg:#060A10;–card:#0C1018;–gold:#D4A843;–blue:#4F8EF7;–green:#34D399;
+–red:#F87171;–violet:#A78BFA;–orange:#FB923C;–teal:#2DD4BF;
+–text:#F0F4FF;–muted:#8899BB;–dim:#556677;–border:rgba(255,255,255,0.06);
+}
 
-const C = {
-bg:”#060A10”, card:”#0C1018”, card2:”#111827”,
-gold:”#D4A843”, blue:”#4F8EF7”, green:”#34D399”, red:”#F87171”,
-violet:”#A78BFA”, orange:”#FB923C”, teal:”#2DD4BF”,
-text:”#F0F4FF”, muted:”#8899BB”, dim:”#556677”,
-border:“rgba(255,255,255,0.06)”,
-};
+.wrap{max-width:1200px;margin:0 auto;padding:0 20px}
+section{padding:100px 0;position:relative}
+h1,h2,.serif{font-family:Georgia,‘Playfair Display’,serif}
+.mono{font-family:‘DM Mono’,monospace}
 
-/* ── Reusable ── */
-const SL=({children,color=C.gold})=>(<div style={{display:“flex”,alignItems:“center”,gap:10,marginBottom:16}}><div style={{width:3,height:16,background:color,borderRadius:2}}/><span style={{fontSize:11,fontWeight:800,letterSpacing:“0.2em”,textTransform:“uppercase”,color,fontFamily:”‘DM Sans’,sans-serif”}}>{children}</span></div>);
-const H2=({children,sub,sc=C.gold})=>(<div style={{marginBottom:48}}><h2 style={{fontSize:“clamp(32px,5vw,52px)”,fontWeight:800,color:C.text,lineHeight:1.08,margin:0,fontFamily:“Georgia,serif”,letterSpacing:”-0.02em”}}>{children}</h2>{sub&&<p style={{fontSize:“clamp(16px,2.5vw,22px)”,fontWeight:700,color:sc,marginTop:12,fontFamily:“Georgia,serif”,lineHeight:1.3}}>{sub}</p>}</div>);
-const Sec=({id,children,bg})=>(<section id={id} style={{padding:“100px 0”,position:“relative”,background:bg||“transparent”}}><div style={{maxWidth:1200,margin:“0 auto”,padding:“0 20px”}}>{children}</div></section>);
+/* Nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;transition:all 0.3s;padding:0 20px}
+.nav.scrolled{background:rgba(6,10,16,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(–border)}
+.nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px}
+.nav-link{color:var(–muted);font-size:13px;font-weight:600;transition:color 0.2s;letter-spacing:0.02em}
+.nav-link:hover{color:var(–gold)}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-burger{display:none;background:none;border:none;cursor:pointer;padding:8px;margin-left:auto}
+.nav-mobile{display:none;padding:20px 24px;flex-direction:column;gap:20px;background:rgba(6,10,16,0.98);border-bottom:1px solid var(–border)}
+.nav-mobile.open{display:flex}
+.nav-mobile a{font-size:16px}
 
-const FC=({num,title,desc,color})=>(<div style={{background:C.card,borderRadius:16,padding:“28px 24px”,position:“relative”,overflow:“hidden”,border:`1px solid ${C.border}`,transition:“transform 0.2s,border-color 0.3s”}} onMouseEnter={e=>{e.currentTarget.style.borderColor=color+“40”;e.currentTarget.style.transform=“translateY(-2px)”;}} onMouseLeave={e=>{e.currentTarget.style.borderColor=C.border;e.currentTarget.style.transform=“none”;}}><div style={{position:“absolute”,top:0,left:0,right:0,height:2,background:`linear-gradient(90deg,${color},transparent 70%)`}}/><div style={{display:“flex”,alignItems:“center”,gap:12,marginBottom:14}}><span style={{fontSize:14,fontWeight:900,color,fontFamily:”‘DM Mono’,monospace”}}>{num}</span><span style={{fontSize:17,fontWeight:700,color:C.text}}>{title}</span></div><p style={{fontSize:14,color:C.muted,lineHeight:1.7,margin:0}}>{desc}</p></div>);
+/* Buttons */
+.cta{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;border-radius:10px;border:none;font-size:14px;font-weight:800;cursor:pointer;transition:all 0.2s;letter-spacing:0.02em;text-decoration:none}
+.cta:hover{transform:translateY(-1px);box-shadow:0 8px 32px rgba(212,168,67,0.2)}
+.cta-p{background:linear-gradient(135deg,#D4A843,#B8860B);color:#030712}
+.cta-s{background:transparent;border:1px solid rgba(212,168,67,0.3);color:#D4A843}
+.cta-s:hover{background:rgba(212,168,67,0.06)}
 
-/* ── Mock App ── */
-const MockBar=({name,score,color,delay=0})=>{const[w,setW]=useState(0);useEffect(()=>{const t=setTimeout(()=>setW(score),300+delay);return()=>clearTimeout(t);},[]);return(<div style={{display:“flex”,alignItems:“center”,gap:10,padding:“5px 12px”,background:“rgba(255,255,255,0.03)”,borderRadius:7,marginBottom:3}}><span style={{fontSize:9,fontWeight:800,color,width:34,fontFamily:”‘DM Mono’,monospace”}}>{name}</span><div style={{flex:1,height:5,background:“rgba(255,255,255,0.06)”,borderRadius:3,overflow:“hidden”}}><div style={{width:`${w}%`,height:“100%”,background:`linear-gradient(90deg,${color},${color}88)`,borderRadius:3,transition:“width 1.2s cubic-bezier(0.4,0,0.2,1)”}}/></div><span style={{fontSize:9,fontWeight:700,color,fontFamily:”‘DM Mono’,monospace”,width:22,textAlign:“right”}}>{score}</span></div>);};
-
-const MockApp=({style={}})=>(<div style={{background:C.card,borderRadius:16,padding:18,border:`1px solid ${C.border}`,maxWidth:360,width:“100%”,boxShadow:“0 24px 80px rgba(0,0,0,0.5)”,…style}}><div style={{display:“flex”,alignItems:“center”,gap:8,marginBottom:14}}><div style={{width:22,height:22,background:“linear-gradient(135deg,#D4A843,#B8860B)”,clipPath:“polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%)”,display:“flex”,alignItems:“center”,justifyContent:“center”,fontSize:6,fontWeight:900,color:”#030712”}}>DO</div><span style={{fontSize:10,fontWeight:700,color:C.gold,fontFamily:”‘DM Mono’,monospace”}}>DO-2026-0047</span><span style={{fontSize:8,color:C.muted,fontFamily:”‘DM Mono’,monospace”}}>#STK-20847</span><div style={{marginLeft:“auto”,display:“flex”,alignItems:“center”,gap:4}}><div style={{width:6,height:6,borderRadius:“50%”,background:C.green}}/><span style={{fontSize:10,fontWeight:700,color:C.green,fontFamily:”‘DM Mono’,monospace”}}>82</span></div></div><div style={{fontSize:7,fontWeight:700,letterSpacing:“0.15em”,textTransform:“uppercase”,color:C.gold,marginBottom:6}}>Live Scoring — All Lenders</div>{[{n:“53”,s:91,c:”#4ADE80”},{n:“OZK”,s:87,c:”#60A5FA”},{n:“BofA”,s:72,c:”#F87171”},{n:“BMO”,s:68,c:”#FB923C”},{n:“USB”,s:64,c:”#38BDF8”},{n:“M&T”,s:58,c:”#86EFAC”},{n:“Colony”,s:45,c:”#C084FC”}].map((l,i)=><MockBar key={l.n} name={l.n} score={l.s} color={l.c} delay={i*80}/>)}<div style={{display:“grid”,gridTemplateColumns:“repeat(3,1fr)”,gap:5,marginTop:12}}>{[{l:“Reserve”,v:”$2,840”,c:C.blue},{l:“Payment”,v:”$674/mo”,c:C.text},{l:“Gross”,v:”$4,120”,c:C.green}].map(s=>(<div key={s.l} style={{textAlign:“center”,padding:“7px 4px”,background:“rgba(255,255,255,0.03)”,borderRadius:7,border:`1px solid ${C.border}`}}><div style={{fontSize:6,letterSpacing:“0.1em”,textTransform:“uppercase”,color:C.dim}}>{s.l}</div><div style={{fontSize:12,fontWeight:700,color:s.c,fontFamily:”‘DM Mono’,monospace”}}>{s.v}</div></div>))}</div></div>);
-
-/* ── Outcome Mock ── */
-const MockOutcome=({style={}})=>(<div style={{background:C.card,borderRadius:16,padding:18,border:`1px solid ${C.border}`,maxWidth:360,width:“100%”,boxShadow:“0 24px 80px rgba(0,0,0,0.5)”,…style}}><div style={{fontSize:7,fontWeight:700,letterSpacing:“0.15em”,textTransform:“uppercase”,color:C.blue,marginBottom:8}}>Outcome Intelligence — Log Bank Response</div><div style={{display:“grid”,gridTemplateColumns:“repeat(3,1fr)”,gap:4,marginBottom:10}}>{[{i:“✅”,n:“Approved”,c:C.green},{i:“↩”,n:“Countered”,c:C.gold},{i:“❌”,n:“Declined”,c:C.red},{i:“💰”,n:“Funded”,c:C.teal},{i:“📋”,n:“Conditional”,c:C.blue},{i:“⏸”,n:“Withdrawn”,c:C.muted}].map(o=>(<div key={o.n} style={{padding:“6px 4px”,borderRadius:6,border:`1px solid ${C.border}`,background:“rgba(255,255,255,0.02)”,textAlign:“center”}}><div style={{fontSize:12}}>{o.i}</div><div style={{fontSize:7,fontWeight:700,color:o.c,marginTop:1}}>{o.n}</div></div>))}</div><div style={{background:“rgba(52,211,153,0.06)”,border:“1px solid rgba(52,211,153,0.2)”,borderRadius:8,padding:“8px 10px”,marginBottom:8}}><div style={{fontSize:9,fontWeight:700,color:C.green}}>✅ Approved</div><div style={{display:“grid”,gridTemplateColumns:“1fr 1fr 1fr”,gap:6,marginTop:6}}>{[{l:“Buy Rate”,v:“5.74%”},{l:“Amount”,v:”$82,400”},{l:“Term”,v:“240mo”}].map(f=>(<div key={f.l}><div style={{fontSize:6,color:C.dim,textTransform:“uppercase”,letterSpacing:“0.08em”}}>{f.l}</div><div style={{fontSize:11,fontWeight:700,color:C.text,fontFamily:”‘DM Mono’,monospace”}}>{f.v}</div></div>))}</div></div><div style={{display:“flex”,gap:4}}>{[{l:“Avg Buy: 5.62%”,c:C.teal},{l:“Counters 60%”,c:C.gold},{l:“Top: DTI”,c:C.red}].map(b=>(<div key={b.l} style={{fontSize:7,padding:“3px 6px”,borderRadius:4,background:`${b.c}12`,border:`1px solid ${b.c}30`,color:b.c,fontFamily:”‘DM Mono’,monospace”}}>{b.l}</div>))}</div></div>);
-
-/* ── Term Pills Mock ── */
-const MockTerms=({style={}})=>(<div style={{background:C.card,borderRadius:16,padding:18,border:`1px solid ${C.border}`,maxWidth:360,width:“100%”,boxShadow:“0 24px 80px rgba(0,0,0,0.5)”,…style}}><div style={{display:“flex”,alignItems:“center”,gap:8,marginBottom:10}}><div style={{width:32,height:32,borderRadius:8,background:“rgba(96,165,250,0.15)”,border:“1px solid rgba(96,165,250,0.3)”,display:“flex”,alignItems:“center”,justifyContent:“center”,fontSize:8,fontWeight:800,color:”#60A5FA”,fontFamily:”‘DM Mono’,monospace”}}>OZK</div><div><div style={{fontSize:13,fontWeight:700,color:C.text}}>Bank OZK</div><div style={{fontSize:9,color:C.muted}}>5.99% buy · $2,840 reserve</div></div></div><div style={{fontSize:7,fontWeight:700,letterSpacing:“0.08em”,textTransform:“uppercase”,color:C.dim,marginBottom:5}}>Term at OZK</div><div style={{display:“flex”,gap:4,marginBottom:12}}>{[{t:“Auto”,p:null,a:false},{t:“144mo”,p:”$782”,a:false},{t:“180mo”,p:”$674”,a:true},{t:“216mo”,p:”$602”,a:false},{t:“240mo”,p:”$562”,a:false}].map(t=>(<div key={t.t} style={{padding:“4px 8px”,borderRadius:6,border:`1px solid ${t.a?"rgba(45,212,191,0.5)":C.border}`,background:t.a?“rgba(45,212,191,0.08)”:“rgba(255,255,255,0.02)”,textAlign:“center”,minWidth:48}}><div style={{fontSize:8,fontWeight:700,color:t.a?C.teal:C.muted}}>{t.t}</div>{t.p&&<div style={{fontSize:10,fontWeight:700,color:t.a?C.text:C.dim,fontFamily:”‘DM Mono’,monospace”,marginTop:1}}>{t.p}</div>}</div>))}</div><div style={{display:“grid”,gridTemplateColumns:“repeat(5,1fr)”,gap:5}}>{[{l:“Financed”,v:”$82,400”},{l:“LTV”,v:“108%”},{l:“Payment”,v:”$674/mo”,c:C.teal},{l:“DTI”,v:“38%”,c:C.gold},{l:“PTI”,v:“14%”,c:C.green}].map(s=>(<div key={s.l} style={{textAlign:“center”,padding:“6px 2px”,background:“rgba(255,255,255,0.02)”,borderRadius:6,border:`1px solid ${C.border}`}}><div style={{fontSize:6,letterSpacing:“0.08em”,textTransform:“uppercase”,color:C.dim}}>{s.l}</div><div style={{fontSize:10,fontWeight:700,color:s.c||C.muted,fontFamily:”‘DM Mono’,monospace”}}>{s.v}</div></div>))}</div></div>);
-
-function DealOptimaSite() {
-const [scrollY,setScrollY]=useState(0);
-const [menuOpen,setMenuOpen]=useState(false);
-useEffect(()=>{const h=()=>setScrollY(window.scrollY);window.addEventListener(“scroll”,h,{passive:true});return()=>window.removeEventListener(“scroll”,h);},[]);
-
-return(<div style={{background:C.bg,color:C.text,fontFamily:”‘DM Sans’,-apple-system,sans-serif”,overflowX:“hidden”}}>
-
-<style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800;900&display=swap');*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}::selection{background:rgba(212,168,67,0.3);color:#fff}@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}.fade{animation:fadeUp 0.8s ease both}.nav-link{color:${C.muted};text-decoration:none;font-size:13px;font-weight:600;transition:color 0.2s;letter-spacing:0.02em}.nav-link:hover{color:${C.gold}}.cta{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;border-radius:10px;border:none;font-size:14px;font-weight:800;cursor:pointer;transition:all 0.2s;letter-spacing:0.02em;text-decoration:none}.cta:hover{transform:translateY(-1px);box-shadow:0 8px 32px rgba(212,168,67,0.2)}.cta-p{background:linear-gradient(135deg,#D4A843,#B8860B);color:#030712}.cta-s{background:transparent;border:1px solid rgba(212,168,67,0.3);color:#D4A843}.cta-s:hover{background:rgba(212,168,67,0.06)}
+/* Grids */
 .g2{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
 .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
 .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
@@ -64,237 +53,358 @@ return(<div style={{background:C.bg,color:C.text,fontFamily:”‘DM Sans’,-ap
 .g-hero{display:grid;grid-template-columns:1.1fr 0.9fr;gap:60px;align-items:center}
 .g-arch{display:grid;grid-template-columns:1fr 1.4fr 1fr;gap:24px;align-items:start}
 .g-show{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
-.nav-links{display:flex;align-items:center;gap:28px}
-.nav-burger{display:none;background:none;border:none;cursor:pointer;padding:8px}
-.mob-hide{display:block}
+
+/* Section label */
+.sl{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.sl-bar{width:3px;height:16px;border-radius:2px}
+.sl-text{font-size:11px;font-weight:800;letter-spacing:0.2em;text-transform:uppercase}
+
+/* Feature card */
+.fc{background:var(–card);border-radius:16px;padding:28px 24px;position:relative;overflow:hidden;border:1px solid var(–border);transition:transform 0.2s,border-color 0.3s}
+.fc:hover{transform:translateY(-2px)}
+.fc-bar{position:absolute;top:0;left:0;right:0;height:2px}
+.fc-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.fc-num{font-size:14px;font-weight:900}
+.fc-title{font-size:17px;font-weight:700;color:var(–text)}
+.fc-desc{font-size:14px;color:var(–muted);line-height:1.7}
+
+/* Mock app */
+.mock{background:var(–card);border-radius:16px;padding:18px;border:1px solid var(–border);max-width:360px;width:100%;box-shadow:0 24px 80px rgba(0,0,0,0.5)}
+.mock-bar{display:flex;align-items:center;gap:10px;padding:5px 12px;background:rgba(255,255,255,0.03);border-radius:7px;margin-bottom:3px}
+.mock-fill{height:5px;border-radius:3px;transition:width 1.2s cubic-bezier(0.4,0,0.2,1)}
+
+/* Animations */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.fade{animation:fadeUp 0.8s ease both}
+.float{animation:float 6s ease-in-out infinite}
+
+/* Card */
+.card{background:var(–card);border-radius:14px;padding:24px 22px;border:1px solid var(–border)}
+
+/* Hex logo */
+.hex{background:linear-gradient(135deg,#D4A843,#B8860B);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:flex;align-items:center;justify-content:center;font-weight:900;color:#030712}
+
+/* Responsive */
 @media(max-width:900px){
-  .g-hero{grid-template-columns:1fr;gap:40px;text-align:center}
-  .g-arch{grid-template-columns:1fr;gap:16px}
-  .g2{grid-template-columns:1fr}
-  .g3{grid-template-columns:1fr}
-  .g4{grid-template-columns:repeat(2,1fr)}
-  .g-show{grid-template-columns:1fr;gap:32px}
-  .g-feat{grid-template-columns:1fr}
-  .nav-links{display:none}
-  .nav-burger{display:flex}
-  .mob-hide{display:none}
-  section{padding:60px 0 !important}
+.g-hero,.g-arch,.g2,.g3,.g-show,.g-feat{grid-template-columns:1fr}
+.g4{grid-template-columns:repeat(2,1fr)}
+.nav-links{display:none!important}
+.nav-burger{display:flex!important}
+section{padding:60px 0!important}
+.g-hero{text-align:center;gap:40px}
+.hero-ctas{justify-content:center}
+.hero-mock{display:flex;justify-content:center}
 }
 @media(max-width:600px){
-  .g4{grid-template-columns:repeat(2,1fr);gap:8px}
-  .cta{padding:12px 24px;font-size:13px;width:100%;justify-content:center}
-}`}</style>
+.g4{grid-template-columns:repeat(2,1fr);gap:8px}
+.cta{padding:12px 24px;font-size:13px;width:100%;justify-content:center}
+}
+</style>
 
-{/* NAV */}
+</head>
+<body>
 
-<nav style={{position:"fixed",top:0,left:0,right:0,zIndex:1000,background:scrollY>50?"rgba(6,10,16,0.95)":"transparent",backdropFilter:scrollY>50?"blur(20px)":"none",borderBottom:scrollY>50?`1px solid ${C.border}`:"1px solid transparent",transition:"all 0.3s",padding:"0 20px"}}>
-<div style={{maxWidth:1200,margin:"0 auto",display:"flex",alignItems:"center",justifyContent:"space-between",height:64,gap:16}}>
-<div style={{display:"flex",alignItems:"center",gap:10,flexShrink:0}}><div style={{width:30,height:30,background:"linear-gradient(135deg,#D4A843,#B8860B)",clipPath:"polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:9,fontWeight:900,color:"#030712"}}>DO</div><span style={{fontFamily:"Georgia,serif",fontWeight:700,fontSize:17}}><span style={{color:C.gold}}>D</span>eal<span style={{color:C.gold}}>O</span>ptima</span></div>
-<div style={{display:"flex",alignItems:"center",gap:28}} className="nav-links"><a href="#platform" className="nav-link">Platform</a><a href="#features" className="nav-link">Features</a><a href="#intelligence" className="nav-link">AI</a><a href="#pricing" className="nav-link">Pricing</a><a href="#demo" className="cta cta-p" style={{padding:"9px 22px",fontSize:12}}>Get a Demo</a></div>
-<button className="nav-burger" onClick={()=>setMenuOpen(o=>!o)} style={{background:"none",border:"none",cursor:"pointer",padding:8,marginLeft:"auto"}}><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke={C.gold} strokeWidth="2"><path d={menuOpen?"M6 6l12 12M6 18L18 6":"M4 7h16M4 12h16M4 17h16"}/></svg></button>
+<!-- NAV -->
+
+<nav class="nav" id="nav">
+<div class="nav-inner">
+<div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+  <div class="hex" style="width:30px;height:30px;font-size:9px">DO</div>
+  <span class="serif" style="font-weight:700;font-size:17px"><span style="color:var(--gold)">D</span>eal<span style="color:var(--gold)">O</span>ptima</span>
 </div>
-{menuOpen&&<div style={{padding:"20px 24px",display:"flex",flexDirection:"column",gap:20,background:"rgba(6,10,16,0.98)",borderBottom:`1px solid ${C.border}`}}><a href="#platform" className="nav-link" style={{fontSize:16}} onClick={()=>setMenuOpen(false)}>Platform</a><a href="#features" className="nav-link" style={{fontSize:16}} onClick={()=>setMenuOpen(false)}>Features</a><a href="#intelligence" className="nav-link" style={{fontSize:16}} onClick={()=>setMenuOpen(false)}>AI Learning</a><a href="#pricing" className="nav-link" style={{fontSize:16}} onClick={()=>setMenuOpen(false)}>Pricing</a><a href="#demo" className="cta cta-p" style={{justifyContent:"center",marginTop:4}} onClick={()=>setMenuOpen(false)}>Get a Demo</a></div>}
+<div class="nav-links">
+  <a href="#platform" class="nav-link">Platform</a>
+  <a href="#features" class="nav-link">Features</a>
+  <a href="#intelligence" class="nav-link">AI</a>
+  <a href="#pricing" class="nav-link">Pricing</a>
+  <a href="#demo" class="cta cta-p" style="padding:9px 22px;font-size:12px">Get a Demo</a>
+</div>
+<button class="nav-burger" onclick="document.getElementById('mob-menu').classList.toggle('open')">
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#D4A843" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+</button>
+</div>
+<div class="nav-mobile" id="mob-menu">
+  <a href="#platform" class="nav-link" onclick="document.getElementById('mob-menu').classList.remove('open')">Platform</a>
+  <a href="#features" class="nav-link" onclick="document.getElementById('mob-menu').classList.remove('open')">Features</a>
+  <a href="#intelligence" class="nav-link" onclick="document.getElementById('mob-menu').classList.remove('open')">AI Learning</a>
+  <a href="#pricing" class="nav-link" onclick="document.getElementById('mob-menu').classList.remove('open')">Pricing</a>
+  <a href="#demo" class="cta cta-p" style="justify-content:center" onclick="document.getElementById('mob-menu').classList.remove('open')">Get a Demo</a>
+</div>
 </nav>
 
-{/* HERO */}
+<!-- HERO -->
 
-<section style={{minHeight:"100vh",display:"flex",alignItems:"center",position:"relative",overflow:"hidden",paddingTop:80}}>
-<div style={{position:"absolute",top:0,left:0,right:0,height:3,background:`linear-gradient(90deg,${C.gold},${C.blue},${C.green},${C.gold})`}}/>
-<div style={{position:"absolute",top:"20%",right:"-10%",width:600,height:600,background:`radial-gradient(circle,${C.gold}08 0%,transparent 70%)`,pointerEvents:"none"}}/>
-<div style={{maxWidth:1200,margin:"0 auto",padding:"0 20px",width:"100%"}} className="g-hero">
-<div className="fade">
-<div style={{fontSize:13,fontWeight:700,color:C.gold,letterSpacing:"0.15em",textTransform:"uppercase",marginBottom:20}}>The AI-Powered F&I Intelligence Platform</div>
-<h1 style={{fontSize:"clamp(40px,6vw,64px)",fontWeight:800,lineHeight:1.05,fontFamily:"Georgia,'Playfair Display',serif",letterSpacing:"-0.02em",marginBottom:24}}>Know Your Lender.<br/><span style={{color:C.gold}}>Before You Call.</span></h1>
-<p style={{fontSize:18,color:C.muted,lineHeight:1.7,marginBottom:36,maxWidth:520}}>Score every lender simultaneously. Structure every deal correctly. Know your exact reserve — to the dollar — before you ever hit submit.</p>
-<div style={{display:"flex",gap:14,flexWrap:"wrap",marginBottom:48}}><a href="#demo" className="cta cta-p">Request a Demo →</a><a href="#platform" className="cta cta-s">See How It Works</a></div>
-<div className="g4">{[{v:"ALL",l:"Your Lenders"},{v:"25+",l:"Bureau Signals"},{v:"0–100",l:"Dual Scoring"},{v:"<1s",l:"Analysis"}].map(s=>(<div key={s.l} style={{textAlign:"center",padding:"12px 8px",background:C.card,borderRadius:10,border:`1px solid ${C.border}`}}><div style={{fontSize:20,fontWeight:900,color:C.gold,fontFamily:"'DM Mono',monospace"}}>{s.v}</div><div style={{fontSize:8,fontWeight:700,letterSpacing:"0.12em",textTransform:"uppercase",color:C.dim,marginTop:4}}>{s.l}</div></div>))}</div>
+<section style="min-height:100vh;display:flex;align-items:center;padding-top:80px;overflow:hidden">
+<div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--blue),var(--green),var(--gold))"></div>
+<div class="wrap g-hero">
+<div class="fade">
+  <div style="font-size:13px;font-weight:700;color:var(--gold);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:20px">The AI-Powered F&I Intelligence Platform</div>
+  <h1 style="font-size:clamp(40px,6vw,64px);font-weight:800;line-height:1.05;letter-spacing:-0.02em;margin-bottom:24px">Know Your Lender.<br><span style="color:var(--gold)">Before You Call.</span></h1>
+  <p style="font-size:18px;color:var(--muted);line-height:1.7;margin-bottom:36px;max-width:520px">Score every lender simultaneously. Structure every deal correctly. Know your exact reserve — to the dollar — before you ever hit submit.</p>
+  <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:48px" class="hero-ctas">
+    <a href="#demo" class="cta cta-p">Request a Demo →</a>
+    <a href="#platform" class="cta cta-s">See How It Works</a>
+  </div>
+  <div class="g4">
+    <div style="text-align:center;padding:12px 8px;background:var(--card);border-radius:10px;border:1px solid var(--border)"><div class="mono" style="font-size:20px;font-weight:900;color:var(--gold)">ALL</div><div style="font-size:8px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--dim);margin-top:4px">Your Lenders</div></div>
+    <div style="text-align:center;padding:12px 8px;background:var(--card);border-radius:10px;border:1px solid var(--border)"><div class="mono" style="font-size:20px;font-weight:900;color:var(--gold)">25+</div><div style="font-size:8px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--dim);margin-top:4px">Bureau Signals</div></div>
+    <div style="text-align:center;padding:12px 8px;background:var(--card);border-radius:10px;border:1px solid var(--border)"><div class="mono" style="font-size:20px;font-weight:900;color:var(--gold)">0–100</div><div style="font-size:8px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--dim);margin-top:4px">Dual Scoring</div></div>
+    <div style="text-align:center;padding:12px 8px;background:var(--card);border-radius:10px;border:1px solid var(--border)"><div class="mono" style="font-size:20px;font-weight:900;color:var(--gold)">&lt;1s</div><div style="font-size:8px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--dim);margin-top:4px">Analysis</div></div>
+  </div>
 </div>
-<div className="fade" style={{animationDelay:"0.3s",display:"flex",justifyContent:"center"}}><div style={{animation:"float 6s ease-in-out infinite"}}><MockApp/></div></div>
-</div></section>
-
-{/* PROBLEM */}
-<Sec id="problem">
-<SL color={C.red}>The Problem</SL>
-
-<H2 sub="Not from lack of effort — from not having the right tool at the desk." sc={C.muted}>The Average F&I Manager Leaks <span style={{color:C.red}}>$36,000 a Year.</span></H2>
-<div className="g-feat" style={{marginBottom:40}}>
-{[{t:"Reserve Formula Wrong",d:"Every lender calculates differently — your manager uses one formula for all of them. Wrong by $300–$600 per deal.",c:C.red},{t:"Wrong Lender Called First",d:"720 FICO at 115% LTV goes to OZK, not Fifth Third. Without the matrix, your team calls alphabetically.",c:C.orange},{t:"No Live DTI / PTI Check",d:"48% DTI passes at Medallion but kills the deal at BofA. Your team finds out after the hard pull.",c:C.gold},{t:"Rate Sheets Running Stale",d:"Your desk is running last quarter's numbers on today's deals. Programs change monthly — your tool should too.",c:C.blue}].map(p=>(<div key={p.t} style={{background:C.card,borderRadius:14,padding:"24px 22px",border:`1px solid ${C.border}`,position:"relative",overflow:"hidden"}}><div style={{position:"absolute",top:0,left:0,width:4,height:"100%",background:p.c}}/><div style={{fontSize:16,fontWeight:700,color:C.text,marginBottom:10,paddingLeft:8}}>{p.t}</div><p style={{fontSize:13,color:C.muted,lineHeight:1.7,paddingLeft:8}}>{p.d}</p></div>))}
-</div>
-<div style={{padding:"20px 28px",background:C.card,borderRadius:12,border:`1px solid ${C.border}`,textAlign:"center"}}><span style={{fontSize:15,fontWeight:700,color:C.text}}>4-manager store = $144,000 in recoverable gross per year.</span><span style={{fontSize:13,color:C.muted,marginLeft:12}}>RV / Marine stores: $50K–$75K per manager.</span></div>
-</Sec>
-
-{/* WHAT IT IS — DECISION ENGINE */}
-<Sec id="platform" bg="rgba(255,255,255,0.01)">
-<SL color={C.gold}>The Architecture</SL>
-
-<H2 sub="Not a CRM. Not a DMS. Not a Replacement.">A Decision Engine.</H2>
-<div className="g-arch">
-{/* Left: What goes in */}
-<div>
-<div style={{fontSize:10,fontWeight:700,letterSpacing:"0.15em",textTransform:"uppercase",color:C.violet,marginBottom:14}}>What Goes In</div>
-{[{t:"700Credit Soft Pull",d:"Customer scans QR. 20 scoring fields auto-fill.",c:C.violet},{t:"Inventory Feed",d:"Stock # auto-pulls year, make, model, mileage.",c:C.blue},{t:"F&I Manual Entry",d:"Sale price, invoice, trade, down. 5 fields, 10 seconds.",c:C.orange}].map(i=>(<div key={i.t} style={{background:C.card,borderRadius:10,padding:"14px 16px",marginBottom:8,borderLeft:`3px solid ${i.c}`}}><div style={{fontSize:12,fontWeight:700,color:i.c}}>{i.t}</div><div style={{fontSize:11,color:C.muted,marginTop:4}}>{i.d}</div></div>))}
-</div>
-{/* Center: Engine */}
-<div style={{background:C.card,borderRadius:16,padding:"28px 24px",border:`1px solid ${C.gold}30`,position:"relative"}}><div style={{position:"absolute",top:0,left:0,right:0,height:3,background:C.gold}}/><div style={{fontSize:10,fontWeight:700,letterSpacing:"0.2em",textTransform:"uppercase",color:C.gold,textAlign:"center",marginBottom:6}}>DealOptima</div><div style={{fontSize:18,fontWeight:700,color:C.text,textAlign:"center",marginBottom:16}}>The Decision Engine</div>
-{[{t:"Scores every lender simultaneously",c:C.blue},{t:"Exact reserve per formula type",c:C.gold},{t:"Flags bad structure before submission",c:C.red},{t:"Ranks by profit, payment, or approval",c:C.green},{t:"Rate buydown cost to the penny",c:C.orange},{t:"Per-lender term control",c:C.teal},{t:"Learns from every logged outcome",c:C.violet}].map(a=>(<div key={a.t} style={{padding:"7px 12px",background:`${a.c}0A`,borderRadius:6,marginBottom:4,fontSize:12,color:a.c,fontWeight:600}}>{a.t}</div>))}
-<div style={{marginTop:14,padding:"8px 12px",background:"rgba(52,211,153,0.06)",borderRadius:8,textAlign:"center"}}><span style={{fontSize:10,fontWeight:700,color:C.green}}>NO SSN · NO DOB · NO NAME · NO ADDRESS</span></div>
-</div>
-{/* Right: What comes out */}
-<div>
-<div style={{fontSize:10,fontWeight:700,letterSpacing:"0.15em",textTransform:"uppercase",color:C.green,marginBottom:14}}>What Comes Out</div>
-<div style={{background:C.card,borderRadius:10,padding:"14px 16px",borderLeft:`3px solid ${C.green}`}}><div style={{fontSize:12,fontWeight:700,color:C.green,marginBottom:6}}>The Answer</div>{["Which lender wins","What rate to sell at","Exact reserve dollar","Payment at every term","What you leave on the table","Deal Doctor if no one qualifies","Stip list for the winning lender"].map(s=>(<div key={s} style={{fontSize:11,color:C.muted,padding:"3px 0"}}>• {s}</div>))}</div>
-<div style={{background:C.card,borderRadius:10,padding:"14px 16px",marginTop:8,borderLeft:`3px solid ${C.orange}`}}><div style={{fontSize:12,fontWeight:700,color:C.orange,marginBottom:4}}>F&I Manager Knows</div><div style={{fontSize:11,color:C.muted}}>Submits in their CRM exactly like they do today. Zero workflow change.</div></div>
+<div class="fade hero-mock" style="animation-delay:0.3s">
+  <div class="float">
+    <div class="mock" id="hero-mock"></div>
+  </div>
 </div>
 </div>
-<div style={{marginTop:32,padding:"16px 24px",background:C.card,borderRadius:12,border:`1px solid ${C.border}`,textAlign:"center"}}><p style={{fontSize:14,color:C.gold,fontFamily:"Georgia,serif",fontStyle:"italic"}}>We don't replace your CRM. We don't replace RouteOne. We make your F&I manager smarter before they ever touch either one.</p></div>
-</Sec>
+</section>
 
-{/* SCORING ENGINE */}
-<Sec id="scoring">
-<SL color={C.blue}>The Scoring Engine</SL>
+<!-- PROBLEM -->
 
-<H2 sub="Proprietary. Transparent. Evolving.">Two Scores. One Answer.</H2>
-<div className="g2">
-<div style={{background:C.card,borderRadius:16,padding:"28px 24px",position:"relative",overflow:"hidden"}}><div style={{position:"absolute",top:0,left:0,right:0,height:3,background:C.blue}}/><div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}><div><div style={{fontSize:10,fontWeight:700,letterSpacing:"0.15em",textTransform:"uppercase",color:C.blue}}>The Deal Structure Score</div><div style={{fontSize:16,fontWeight:700,color:C.text,marginTop:6}}>How strong is this deal?</div></div><div style={{fontSize:36,fontWeight:900,color:C.blue,fontFamily:"'DM Mono',monospace"}}>78<span style={{fontSize:14,color:C.dim}}>/100</span></div></div><p style={{fontSize:13,color:C.muted,lineHeight:1.7,marginTop:14}}>Before a single lender is evaluated, the deal gets a health rating. LTV, DTI, down payment, FICO tier, credit depth, collections, housing — every factor weighted into one number.</p><p style={{fontSize:13,color:C.muted,lineHeight:1.7,marginTop:10}}>A 92 means most lenders will fight for it. A 54 means structural problems. The Deal Doctor reads this score and tells you exactly what to change.</p><div style={{fontSize:12,fontWeight:700,color:C.blue,fontStyle:"italic",marginTop:16}}>Visible to your F&I manager on every deal.</div></div>
-<div style={{background:C.card,borderRadius:16,padding:"28px 24px",position:"relative",overflow:"hidden"}}><div style={{position:"absolute",top:0,left:0,right:0,height:3,background:C.gold}}/><div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}><div><div style={{fontSize:10,fontWeight:700,letterSpacing:"0.15em",textTransform:"uppercase",color:C.gold}}>The Lender Match Score</div><div style={{fontSize:16,fontWeight:700,color:C.text,marginTop:6}}>How well does this deal fit each bank?</div></div><div style={{fontSize:36,fontWeight:900,color:C.gold,fontFamily:"'DM Mono',monospace"}}>91<span style={{fontSize:14,color:C.dim}}>/100</span></div></div><p style={{fontSize:13,color:C.muted,lineHeight:1.7,marginTop:14}}>Each lender gets its own 0–100 composite score. FICO fit, LTV tolerance, DTI threshold, mileage cap, reserve opportunity — all weighted per lender.</p><p style={{fontSize:13,color:C.muted,lineHeight:1.7,marginTop:10}}>OZK scores 91 because LTV and FICO land in their sweet spot. Fifth Third scores 64 because their DTI threshold is tighter. The ranking isn't alphabetical — it's mathematical.</p><div style={{fontSize:12,fontWeight:700,color:C.gold,fontStyle:"italic",marginTop:16}}>Every lender ranked. Highest score = best path.</div></div>
+<section id="problem">
+<div class="wrap">
+  <div class="sl"><div class="sl-bar" style="background:var(--red)"></div><span class="sl-text" style="color:var(--red)">The Problem</span></div>
+  <div style="margin-bottom:48px"><h2 style="font-size:clamp(32px,5vw,52px);font-weight:800;line-height:1.08;letter-spacing:-0.02em" class="serif">The Average F&I Manager Leaks <span style="color:var(--red)">$36,000 a Year.</span></h2><p style="font-size:clamp(16px,2.5vw,22px);font-weight:700;color:var(--muted);margin-top:12px;line-height:1.3" class="serif">Not from lack of effort — from not having the right tool at the desk.</p></div>
+  <div class="g-feat" style="margin-bottom:40px" id="problem-cards"></div>
+  <div style="padding:20px 28px;background:var(--card);border-radius:12px;border:1px solid var(--border);text-align:center"><span style="font-size:15px;font-weight:700">4-manager store = $144,000 in recoverable gross per year.</span> <span style="font-size:13px;color:var(--muted);margin-left:12px">RV / Marine stores: $50K–$75K per manager.</span></div>
 </div>
-<div style={{marginTop:24,background:C.card,borderRadius:12,padding:"20px 24px",border:`1px solid ${C.border}`}}><div style={{fontSize:10,fontWeight:700,letterSpacing:"0.15em",textTransform:"uppercase",color:C.violet,marginBottom:8}}>The Algorithm Evolves</div><p style={{fontSize:13,color:C.muted,lineHeight:1.7}}>Core ships with universal weights built from industry data. When you upgrade to Pro, the AI tunes these weights to YOUR store — your lenders, your deal mix, your approval history. Same engine. Smarter math. The scoring becomes yours.</p></div>
-</Sec>
+</section>
 
-{/* FEATURES */}
-<Sec id="features" bg="rgba(255,255,255,0.01)">
-<SL>The Platform</SL>
+<!-- ARCHITECTURE -->
 
-<H2 sub="Every tool your F&I manager needs. One screen. One second.">27 Features. Zero Guesswork.</H2>
-
-<div style={{fontSize:10,fontWeight:700,letterSpacing:"0.15em",textTransform:"uppercase",color:C.gold,marginBottom:14}}>Scoring & Intelligence</div>
-<div className="g-feat" style={{marginBottom:36}}>
-<FC num="01" title="Proprietary Dual Scoring" desc="Every deal gets a Structure Score (how strong is the deal?) and every lender gets a Match Score (how well does it fit?). Both 0–100, 25+ weighted signals. Highest score = best path." color={C.gold}/>
-<FC num="02" title="25+ Bureau Signals Weighted" desc="Not just FICO. Utilization, inquiries, collections, derogs, years in file, housing status — each signal shows its exact point impact with an underwriter-level explanation." color={C.violet}/>
-<FC num="03" title="Three Sort Modes" desc="Max Profit ranks by reserve + F&I gross combined. Lowest Payment ranks by buy rate. Best Approval ranks by odds. One tap to switch — rankings update instantly across all lenders." color={C.blue}/>
-<FC num="04" title="Deal Health Monitor" desc="A live 0–100 score visible in the header on every deal. Green means clean structure. Red means problems. Updates as you change any input — before you look at a single lender." color={C.green}/>
-<FC num="05" title="Outcome Intelligence System" desc="Six outcomes — Approved, Countered, Declined, Funded, Conditional, Withdrawn. Submit-first flow: only lenders you actually called get logged. 15 seconds per outcome. The engine learns from every one." color={C.teal}/>
+<section id="platform" style="background:rgba(255,255,255,0.01)">
+<div class="wrap">
+  <div class="sl"><div class="sl-bar" style="background:var(--gold)"></div><span class="sl-text" style="color:var(--gold)">The Architecture</span></div>
+  <div style="margin-bottom:48px"><h2 class="serif" style="font-size:clamp(32px,5vw,52px);font-weight:800;line-height:1.08;letter-spacing:-0.02em">A Decision Engine.</h2><p class="serif" style="font-size:clamp(16px,2.5vw,22px);font-weight:700;color:var(--gold);margin-top:12px;line-height:1.3">Not a CRM. Not a DMS. Not a Replacement.</p></div>
+  <div class="g-arch" id="arch-section"></div>
+  <div style="margin-top:32px;padding:16px 24px;background:var(--card);border-radius:12px;border:1px solid var(--border);text-align:center"><p style="font-size:14px;color:var(--gold);font-style:italic" class="serif">We don't replace your CRM. We don't replace RouteOne. We make your F&I manager smarter before they ever touch either one.</p></div>
 </div>
+</section>
 
-<div style={{fontSize:10,fontWeight:700,letterSpacing:"0.15em",textTransform:"uppercase",color:C.blue,marginBottom:14}}>Reserve & Rate Tools</div>
-<div className="g-feat" style={{marginBottom:36}}>
-<FC num="06" title="Reserve to the Dollar" desc="Every lender has its own formula — base plus spread, flat percent, tiered flat, spread only. The system knows which applies and calculates your exact reserve. Custom formulas for any dealer agreement." color={C.gold}/>
-<FC num="07" title="Rate Override Slider" desc="Drag the sell rate and watch reserve, payment, total gross, and 'left on table' update live. See the exact cost of every concession before you make it. Per lender, per deal." color={C.teal}/>
-<FC num="08" title="Buydown Table" desc="Full table: every 0.25% step from max sell rate down to buy rate. Reserve sacrificed, payment reduction, and cost-per-dollar of monthly payment saved. Most efficient step highlighted." color={C.violet}/>
-<FC num="09" title="Reverse Payment Calculator" desc="Customer says '$650/mo.' You're at $724. Enter $650 — system shows exactly how much more down at each available term to hit the target. One number in, every answer out." color={C.blue}/>
-<FC num="10" title="Per-Lender Term Control" desc="Each lender card has its own term pills — tap 144, 180, 216, 240 and see that bank's payment update instantly. Compare terms per bank without touching the others. Global override still available." color={C.green}/>
+<!-- SCORING ENGINE -->
+
+<section id="scoring">
+<div class="wrap">
+  <div class="sl"><div class="sl-bar" style="background:var(--blue)"></div><span class="sl-text" style="color:var(--blue)">The Scoring Engine</span></div>
+  <div style="margin-bottom:48px"><h2 class="serif" style="font-size:clamp(32px,5vw,52px);font-weight:800;line-height:1.08;letter-spacing:-0.02em">Two Scores. One Answer.</h2><p class="serif" style="font-size:clamp(16px,2.5vw,22px);font-weight:700;color:var(--gold);margin-top:12px;line-height:1.3">Proprietary. Transparent. Evolving.</p></div>
+  <div class="g2" id="scoring-cards"></div>
+  <div style="margin-top:24px;background:var(--card);border-radius:12px;padding:20px 24px;border:1px solid var(--border)"><div style="font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--violet);margin-bottom:8px">The Algorithm Evolves</div><p style="font-size:13px;color:var(--muted);line-height:1.7">Core ships with universal weights built from industry data. When you upgrade to Pro, the AI tunes these weights to YOUR store — your lenders, your deal mix, your approval history. Same engine. Smarter math. The scoring becomes yours.</p></div>
 </div>
+</section>
 
-<div style={{fontSize:10,fontWeight:700,letterSpacing:"0.15em",textTransform:"uppercase",color:C.teal,marginBottom:14}}>Deal Structure & Compliance</div>
-<div className="g-feat" style={{marginBottom:36}}>
-<FC num="11" title="Live DTI · PTI · LTV" desc="Every ratio updates live, color-coded red/yellow/green against each lender's actual thresholds. 48% DTI passes at Medallion but kills the deal at BofA — you see it before the bank does." color={C.blue}/>
-<FC num="12" title="Front-End / Backend / Total LTV" desc="Three separate LTV checks per lender — front-end cap (unit only), backend allowance (F&I products as % of invoice), and total combined ceiling. Know exactly where you're over and why." color={C.gold}/>
-<FC num="13" title="F&I Product Intelligence" desc="Load GAP, warranty, service contracts, paint protection. The system recalculates every lender's backend LTV against their max percentage of invoice. See which lenders accept your full product stack." color={C.green}/>
-<FC num="14" title="Down Payment Intelligence" desc="Each lender has different minimums based on FICO, loan amount, and program tier. The system shows exactly how short you are per lender and what additional down unlocks each one." color={C.orange}/>
-<FC num="15" title="Mileage Intelligence" desc="BofA caps at 50K gas / 100K diesel. OZK allows 75K / 150K. M&T tops at 40K. Enter the mileage, toggle gas or diesel, and watch your lender book respond instantly." color={C.teal}/>
-<FC num="16" title="High Credit Exposure Flag" desc="Financing $82K when the customer's highest prior credit is $28K? That's a 2.9x exposure ratio. The system flags it and shows which lenders care about that metric." color={C.red}/>
+<!-- FEATURES -->
+
+<section id="features" style="background:rgba(255,255,255,0.01)">
+<div class="wrap">
+  <div class="sl"><div class="sl-bar" style="background:var(--gold)"></div><span class="sl-text" style="color:var(--gold)">The Platform</span></div>
+  <div style="margin-bottom:48px"><h2 class="serif" style="font-size:clamp(32px,5vw,52px);font-weight:800;line-height:1.08;letter-spacing:-0.02em">27 Features. Zero Guesswork.</h2><p class="serif" style="font-size:clamp(16px,2.5vw,22px);font-weight:700;color:var(--gold);margin-top:12px;line-height:1.3">Every tool your F&I manager needs. One screen. One second.</p></div>
+  <div id="features-grid"></div>
 </div>
+</section>
 
-<div style={{fontSize:10,fontWeight:700,letterSpacing:"0.15em",textTransform:"uppercase",color:C.orange,marginBottom:14}}>Lender Program Intelligence</div>
-<div className="g-feat" style={{marginBottom:36}}>
-<FC num="17" title="Deal Doctor" desc="No qualifying lenders? The system shows the exact structural move — '$2,100 more down unlocks OZK' or '20 points higher FICO opens Fifth Third at 7.49%.' Dollar amounts, not guesses." color={C.orange}/>
-<FC num="18" title="FICO Gap Badge" desc="Sitting at 738 FICO? The system shows '2 points to 740 tier → 0.25% lower buy rate at OZK.' Per lender, per tier boundary. Your F&I manager sees exactly what one score bump is worth." color={C.blue}/>
-<FC num="19" title="Acceptance Rules Engine" desc="Toggle BK on — 12 lenders disappear, 2 remain. Toggle repo — score caps at 45. Every flag shows exactly who accepts, who exits, and what the conditions are." color={C.red}/>
-<FC num="20" title="Program Notes + Stips" desc="Full program notes and stip requirements for every lender, one tap from the result card. Colony requires POI on all apps over $100K. Fifth Third needs FFD on front-end advances. No more calling the rep." color={C.gold}/>
-<FC num="21" title="Co-Signer Support" desc="Add a co-borrower with their own FICO score. The system recalculates approval odds using the stronger borrower where applicable. Shows the exact point boost per lender." color={C.violet}/>
-<FC num="22" title="Prior RV / Auto Loan Detection" desc="Some lenders reward prior RV or auto loan history with better approval odds. Toggle it on and watch those lenders get a score boost. The system knows which banks care." color={C.green}/>
+<!-- SHOWCASE -->
+
+<section id="showcase">
+<div class="wrap">
+  <div class="sl"><div class="sl-bar" style="background:var(--teal)"></div><span class="sl-text" style="color:var(--teal)">See It In Action</span></div>
+  <div style="margin-bottom:48px"><h2 class="serif" style="font-size:clamp(32px,5vw,52px);font-weight:800;line-height:1.08;letter-spacing:-0.02em">Built for the F&I Desk.</h2><p class="serif" style="font-size:clamp(16px,2.5vw,22px);font-weight:700;color:var(--gold);margin-top:12px;line-height:1.3">Real screenshots from the actual product.</p></div>
+  <div id="showcase-content"></div>
 </div>
+</section>
 
-<div style={{fontSize:10,fontWeight:700,letterSpacing:"0.15em",textTransform:"uppercase",color:C.green,marginBottom:14}}>Desk & Workflow</div>
-<div className="g-feat" style={{marginBottom:0}}>
-<FC num="23" title="FastPass Desk Check" desc="The sales desk needs a quick answer before the customer sits down in F&I. Enter FICO, income, sale price, down — get a pre-screen in seconds. Separate tab, simplified view." color={C.green}/>
-<FC num="24" title="Save / Load / Manage Deals" desc="Every deal saved with full snapshot — structure, results, outcomes, products. Load any previous deal instantly. Compare results over time. Deal history is searchable by stock number." color={C.blue}/>
-<FC num="25" title="Deal ID System" desc="Every deal gets a unique ID (DO-2026-0001) visible in the header. Track deals by number across your team. When the backend connects, this becomes your deal ledger." color={C.gold}/>
-<FC num="26" title="Stock # / VIN Identification" desc="Deals identified by stock number and VIN — not customer name. When inventory feed connects in Pro, stock # auto-fills year, make, model, mileage. Manual entry works today." color={C.teal}/>
-<FC num="27" title="Gas / Diesel Toggle" desc="One toggle changes every lender's mileage cap simultaneously. BofA goes from 50K to 100K. OZK goes from 75K to 150K. The entire lender book recalculates for the fuel type." color={C.orange}/>
+<!-- AI LEARNING -->
+
+<section id="intelligence" style="background:rgba(255,255,255,0.01)">
+<div class="wrap">
+  <div class="sl"><div class="sl-bar" style="background:var(--violet)"></div><span class="sl-text" style="color:var(--violet)">The AI Learning System</span></div>
+  <div style="margin-bottom:48px"><h2 class="serif" style="font-size:clamp(32px,5vw,52px);font-weight:800;line-height:1.08;letter-spacing:-0.02em">It Learns as You Go.</h2><p class="serif" style="font-size:clamp(16px,2.5vw,22px);font-weight:700;color:var(--gold);margin-top:12px;line-height:1.3">Every Outcome Compounds Into Intelligence.</p></div>
+  <div id="ai-tiers"></div>
+  <div style="margin-top:24px;padding:16px 24px;background:var(--card);border-radius:12px;border:1px solid var(--border);text-align:center"><p style="font-size:13px;color:var(--green);font-weight:600">Your data stays in your store. Your intelligence belongs to your dealership. Leave the platform and it starts from zero. Stay and it compounds every month.</p></div>
 </div>
-</Sec>
+</section>
 
-{/* FEATURE SHOWCASE WITH MOCKUPS */}
-<Sec id="showcase">
-<SL color={C.teal}>See It In Action</SL>
+<!-- SECURITY -->
 
-<H2 sub="Real screenshots from the actual product.">Built for the F&I Desk.</H2>
-<div className="g-show" style={{marginBottom:80}}>
-<div><div style={{fontSize:10,fontWeight:700,letterSpacing:"0.15em",textTransform:"uppercase",color:C.teal,marginBottom:10}}>Per-Lender Term Control</div><h3 style={{fontSize:24,fontWeight:700,color:C.text,marginBottom:12}}>Compare Payments Per Bank. Instantly.</h3><p style={{fontSize:14,color:C.muted,lineHeight:1.7}}>Each lender card has its own term pills. Tap 180mo on OZK and see $674/mo. Same deal at 240mo shows $562/mo. The other lenders stay where they are. Global override still available when you want to force one term across all lenders.</p></div>
-<div style={{display:"flex",justifyContent:"center"}}><MockTerms/></div>
+<section id="security">
+<div class="wrap">
+  <div class="sl"><div class="sl-bar" style="background:var(--teal)"></div><span class="sl-text" style="color:var(--teal)">Security & Data</span></div>
+  <div style="margin-bottom:48px"><h2 class="serif" style="font-size:clamp(32px,5vw,52px);font-weight:800;line-height:1.08;letter-spacing:-0.02em">Exact Data. Zero Identity.</h2><p class="serif" style="font-size:clamp(16px,2.5vw,22px);font-weight:700;color:var(--green);margin-top:12px;line-height:1.3">If someone breached us tomorrow, they'd find deal math. Nothing else.</p></div>
+  <div class="g2" style="margin-bottom:32px" id="security-cols"></div>
+  <div class="g4" id="security-badges"></div>
 </div>
-<div className="g-show">
-<div style={{display:"flex",justifyContent:"center"}}><MockOutcome/></div>
-<div><div style={{fontSize:10,fontWeight:700,letterSpacing:"0.15em",textTransform:"uppercase",color:C.blue,marginBottom:10}}>Outcome Intelligence System</div><h3 style={{fontSize:24,fontWeight:700,color:C.text,marginBottom:12}}>Every Outcome Teaches the Engine.</h3><p style={{fontSize:14,color:C.muted,lineHeight:1.7,marginBottom:12}}>Submit to a lender. Log the result. Six outcomes — Approved, Countered, Declined, Funded, Conditional, Withdrawn — each capturing the exact data that makes the next deal smarter.</p><p style={{fontSize:14,color:C.muted,lineHeight:1.7}}>After 200 deals, the system predicts approval probability, estimated buy rate, and counter likelihood before you pick up the phone.</p></div>
+</section>
+
+<!-- PRICING -->
+
+<section id="pricing" style="background:rgba(255,255,255,0.01)">
+<div class="wrap">
+  <div class="sl"><div class="sl-bar" style="background:var(--gold)"></div><span class="sl-text" style="color:var(--gold)">Pricing</span></div>
+  <div style="margin-bottom:48px"><h2 class="serif" style="font-size:clamp(32px,5vw,52px);font-weight:800;line-height:1.08;letter-spacing:-0.02em">Start Today. Grow With Us.</h2><p class="serif" style="font-size:clamp(16px,2.5vw,22px);font-weight:700;color:var(--gold);margin-top:12px;line-height:1.3">Start With Core. Scale Into Pro. The Platform Grows With You.</p></div>
+  <div class="g3" id="pricing-cards"></div>
+  <div style="margin-top:24px;padding:16px 24px;background:var(--card);border-radius:12px;border:1px solid var(--border);text-align:center"><p style="font-size:13px;color:var(--gold);font-style:italic" class="serif">Core subscribers get first access when Pro launches. Your lenders are already configured. The upgrade is seamless — not a restart.</p></div>
 </div>
-</Sec>
+</section>
 
-{/* AI LEARNING */}
-<Sec id="intelligence" bg="rgba(255,255,255,0.01)">
-<SL color={C.violet}>The AI Learning System</SL>
+<!-- GETTING STARTED -->
 
-<H2 sub="Every Outcome Compounds Into Intelligence.">It Learns as You Go.</H2>
-<div style={{display:"flex",flexDirection:"column",gap:16}}>
-{[{tier:"Tier 1",title:"Lender-Level Outcome Learning",tag:"Active Now",tagC:C.green,c:C.green,desc:"Every logged outcome feeds directly into the scoring algorithm. Approved and funded deals boost the lender's score +20 for matching profiles. Declines drop it −15. After 30 deals, rankings reflect YOUR lenders' real behavior — not published guidelines."},{tier:"Tier 2",title:"Signal Weight Recalibration",tag:"100+ Outcomes",tagC:C.orange,c:C.orange,desc:"The 25 scoring signals recalibrate per store using real outcome data. If Colony declines 8 deals citing DTI, the DTI penalty increases specifically for Colony at your store. Counter patterns teach the system where to tighten structure before submission."},{tier:"Tier 3",title:"Multi-Rooftop Group Intelligence",tag:"Enterprise",tagC:C.violet,c:C.violet,desc:"For dealer groups under one owner. Store A's outcome data benefits Store B — because it's the same company. Colony tightened at your Tampa store? Your Orlando store sees it instantly. Your data never leaves your group. Competitors see nothing."}].map(t=>(<div key={t.tier} style={{background:C.card,borderRadius:14,padding:"24px 28px",position:"relative",overflow:"hidden"}}><div style={{position:"absolute",top:0,left:0,width:4,height:"100%",background:t.c}}/><div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10,paddingLeft:8}}><div style={{display:"flex",alignItems:"center",gap:12}}><span style={{fontSize:11,fontWeight:800,color:t.c,letterSpacing:"0.1em"}}>{t.tier}</span><span style={{fontSize:16,fontWeight:700,color:C.text}}>{t.title}</span></div><span style={{fontSize:9,fontWeight:800,color:t.tagC,letterSpacing:"0.15em",textTransform:"uppercase"}}>{t.tag}</span></div><p style={{fontSize:13,color:C.muted,lineHeight:1.7,paddingLeft:8}}>{t.desc}</p></div>))}
+<section id="demo">
+<div class="wrap">
+  <div class="sl"><div class="sl-bar" style="background:var(--green)"></div><span class="sl-text" style="color:var(--green)">Get Started</span></div>
+  <div style="margin-bottom:48px"><h2 class="serif" style="font-size:clamp(32px,5vw,52px);font-weight:800;line-height:1.08;letter-spacing:-0.02em">30 Days to a Smarter F&I Desk.</h2><p class="serif" style="font-size:clamp(16px,2.5vw,22px);font-weight:700;color:var(--gold);margin-top:12px;line-height:1.3">Send us your rate sheets. We configure your lenders. You run deals.</p></div>
+  <div class="g-feat" style="margin-bottom:40px" id="steps-grid"></div>
+  <div style="background:var(--card);border-radius:16px;padding:40px 32px;border:1px solid var(--border);text-align:center;max-width:600px;margin:0 auto" id="demo-box"></div>
 </div>
-<div style={{marginTop:24,padding:"16px 24px",background:C.card,borderRadius:12,border:`1px solid ${C.border}`,textAlign:"center"}}><p style={{fontSize:13,color:C.green,fontWeight:600}}>Your data stays in your store. Your intelligence belongs to your dealership. Leave the platform and it starts from zero. Stay and it compounds every month.</p></div>
-</Sec>
+</section>
 
-{/* SECURITY */}
-<Sec id="security">
-<SL color={C.teal}>Security & Data</SL>
+<!-- FOOTER -->
 
-<H2 sub="If someone breached us tomorrow, they'd find deal math. Nothing else." sc={C.green}>Exact Data. Zero Identity.</H2>
-<div className="g2" style={{marginBottom:32}}>
-<div style={{background:C.card,borderRadius:14,padding:"24px 22px"}}><div style={{fontSize:10,fontWeight:700,letterSpacing:"0.15em",textTransform:"uppercase",color:C.green,marginBottom:14}}>What We Store</div>{["Stock # + Deal ID","Exact FICO score (718, not a range)","All 25 weighted credit signals","Exact LTV, DTI, PTI ratios","Deal structure (price, invoice, trade, down)","Lender selected + approval outcome","Reserve earned + amount left on table"].map(s=>(<div key={s} style={{fontSize:13,color:C.muted,padding:"5px 0"}}>● {s}</div>))}</div>
-<div style={{background:C.card,borderRadius:14,padding:"24px 22px"}}><div style={{fontSize:10,fontWeight:700,letterSpacing:"0.15em",textTransform:"uppercase",color:C.red,marginBottom:14}}>What We Never Store</div>{["Customer name","Social Security Number","Date of birth","Home address or phone number","Raw 700Credit bureau file","Bank account numbers","Nothing that identifies a human being"].map(s=>(<div key={s} style={{fontSize:13,color:C.muted,padding:"5px 0"}}>✕ {s}</div>))}</div>
+<footer style="border-top:1px solid var(--border);padding:48px 20px">
+<div style="max-width:1200px;margin:0 auto;text-align:center;margin-bottom:40px">
+  <p class="serif" style="font-size:16px;color:var(--muted)">Every other tool helps you find a lender.</p>
+  <p class="serif" style="font-size:16px;font-weight:700;margin-top:6px">DealOptima gives you the right one.</p>
+  <p class="serif" style="font-size:16px;font-weight:700;color:var(--gold);margin-top:6px">Structured correctly. Every deal.</p>
 </div>
-<div className="g4">{[{t:"AES-256",d:"Encrypted at rest"},{t:"TLS 1.3",d:"Encrypted in transit"},{t:"Row-Level",d:"Store A ≠ Store B"},{t:"SOC 2",d:"AWS / Supabase"}].map(s=>(<div key={s.t} style={{textAlign:"center",padding:"16px 12px",background:C.card,borderRadius:10,border:`1px solid ${C.border}`}}><div style={{fontSize:18,fontWeight:800,color:C.teal,fontFamily:"'DM Mono',monospace"}}>{s.t}</div><div style={{fontSize:10,color:C.muted,marginTop:4}}>{s.d}</div></div>))}</div>
-</Sec>
-
-{/* PRICING */}
-<Sec id="pricing" bg="rgba(255,255,255,0.01)">
-<SL>Pricing</SL>
-
-<H2 sub="Start With Core. Scale Into Pro. The Platform Grows With You.">Start Today. Grow With Us.</H2>
-<div className="g3">
-<div style={{background:C.card,borderRadius:20,padding:"36px 28px",border:`1px solid ${C.border}`,display:"flex",flexDirection:"column"}}><div style={{fontSize:9,fontWeight:800,letterSpacing:"0.2em",textTransform:"uppercase",color:C.green,marginBottom:10}}>Available Now</div><div style={{fontSize:22,fontWeight:700,color:C.text,marginBottom:4}}>DealOptima Core</div><div style={{fontSize:36,fontWeight:900,color:C.green,fontFamily:"'DM Mono',monospace"}}>$299</div><div style={{fontSize:12,color:C.muted,marginBottom:4}}>/mo per store</div><div style={{fontSize:11,color:C.green,fontStyle:"italic",marginBottom:24}}>No login required. One link. Start today.</div><div style={{flex:1,display:"flex",flexDirection:"column",gap:8}}>{["Proprietary 25+ signal scoring","Unlimited lender programs","Reserve calc — every formula type","Live DTI · PTI · LTV ratios","Rate slider + buydown table","Reverse payment calculator","Deal Doctor + acceptance rules","Per-lender term control","We configure your lenders","Ongoing program maintenance"].map(i=>(<div key={i} style={{display:"flex",alignItems:"flex-start",gap:8}}><div style={{width:4,height:4,borderRadius:"50%",background:C.green,flexShrink:0,marginTop:7}}/><span style={{fontSize:12,color:C.muted,lineHeight:1.5}}>{i}</span></div>))}</div><a href="mailto:hello@dealoptima.com?subject=DealOptima%20Core%20Pilot%20Request" className="cta cta-p" style={{width:"100%",justifyContent:"center",marginTop:28}}>Start Your Pilot</a></div>
-
-<div style={{background:C.card,borderRadius:20,padding:"36px 28px",border:`1px solid ${C.gold}50`,position:"relative",display:"flex",flexDirection:"column"}}><div style={{position:"absolute",top:-1,left:0,right:0,height:3,background:C.gold,borderRadius:"20px 20px 0 0"}}/><div style={{fontSize:9,fontWeight:800,letterSpacing:"0.2em",textTransform:"uppercase",color:C.gold,marginBottom:10}}>Coming Soon</div><div style={{fontSize:22,fontWeight:700,color:C.text,marginBottom:4}}>DealOptima Pro</div><div style={{fontSize:36,fontWeight:900,color:C.gold,fontFamily:"'DM Mono',monospace"}}>$999–$1,499</div><div style={{fontSize:12,color:C.muted,marginBottom:4}}>/mo per store</div><div style={{fontSize:11,color:C.gold,fontStyle:"italic",marginBottom:24}}>Tiered by 90-day rolling car volume.</div><div style={{flex:1,display:"flex",flexDirection:"column",gap:8}}>{["Everything in Core","700Credit soft pull built-in","Cloud backend — persistent data","Inventory feed API","Up to 10 users (GM + F&I + desk)","Outcome logging + AI learning","F&I Scoreboard + GM dashboard","Counter rate intelligence","Reserve capture reporting"].map(i=>(<div key={i} style={{display:"flex",alignItems:"flex-start",gap:8}}><div style={{width:4,height:4,borderRadius:"50%",background:C.gold,flexShrink:0,marginTop:7}}/><span style={{fontSize:12,color:C.muted,lineHeight:1.5}}>{i}</span></div>))}</div><a href="mailto:hello@dealoptima.com?subject=DealOptima%20Pro%20Waitlist" className="cta" style={{width:"100%",justifyContent:"center",marginTop:28,border:`1px solid ${C.gold}40`,color:C.gold,background:"transparent"}}>Join the Waitlist</a></div>
-
-<div style={{background:C.card,borderRadius:20,padding:"36px 28px",border:`1px solid ${C.border}`,display:"flex",flexDirection:"column"}}><div style={{fontSize:9,fontWeight:800,letterSpacing:"0.2em",textTransform:"uppercase",color:C.violet,marginBottom:10}}>The Full Vision</div><div style={{fontSize:22,fontWeight:700,color:C.text,marginBottom:4}}>Enterprise</div><div style={{fontSize:36,fontWeight:900,color:C.violet,fontFamily:"'DM Mono',monospace"}}>$1,999+</div><div style={{fontSize:12,color:C.muted,marginBottom:4}}>/mo · multi-store groups</div><div style={{fontSize:11,color:C.violet,fontStyle:"italic",marginBottom:24}}>Unlimited users. Custom pricing.</div><div style={{flex:1,display:"flex",flexDirection:"column",gap:8}}>{["Everything in Pro","Unlimited users per store","Multi-store admin dashboard","Group-wide AI intelligence","Rate sheet PDF parser (AI)","Natural language deal Q&A","Dedicated account manager","Shared learning across rooftops","White-glove onboarding"].map(i=>(<div key={i} style={{display:"flex",alignItems:"flex-start",gap:8}}><div style={{width:4,height:4,borderRadius:"50%",background:C.violet,flexShrink:0,marginTop:7}}/><span style={{fontSize:12,color:C.muted,lineHeight:1.5}}>{i}</span></div>))}</div><a href="mailto:hello@dealoptima.com?subject=DealOptima%20Enterprise%20Inquiry" className="cta" style={{width:"100%",justifyContent:"center",marginTop:28,border:`1px solid ${C.violet}40`,color:C.violet,background:"transparent"}}>Contact Sales</a></div>
-</div>
-<div style={{marginTop:24,padding:"16px 24px",background:C.card,borderRadius:12,border:`1px solid ${C.border}`,textAlign:"center"}}><p style={{fontSize:13,color:C.gold,fontFamily:"Georgia,serif",fontStyle:"italic"}}>Core subscribers get first access when Pro launches. Your lenders are already configured. The upgrade is seamless — not a restart.</p></div>
-</Sec>
-
-{/* GETTING STARTED */}
-<Sec id="demo">
-<SL color={C.green}>Get Started</SL>
-
-<H2 sub="Send us your rate sheets. We configure your lenders. You run deals.">30 Days to a Smarter F&I Desk.</H2>
-<div className="g-feat" style={{marginBottom:40}}>
-{[{n:"01",t:"Send Us Your Rate Sheets",d:"PDFs, photos, emails — however you have them. Current programs from every lender in your book.",c:C.green},{n:"02",t:"We Build Your Engine",d:"Every lender configured with the correct reserve formula, rate tiers, LTV caps, DTI thresholds, and stip requirements.",c:C.blue},{n:"03",t:"Your Link Goes Live",d:"One dedicated URL for your store. Open on any device. No install. No login. Bookmark it and start running deals.",c:C.gold},{n:"04",t:"We Maintain It",d:"Lender programs change constantly. When they do, we update your engine and redeploy. That's included — not an add-on.",c:C.violet}].map(s=>(<div key={s.n} style={{background:C.card,borderRadius:14,padding:"24px 22px",position:"relative",overflow:"hidden"}}><div style={{position:"absolute",top:0,left:0,right:0,height:2,background:s.c}}/><div style={{fontSize:20,fontWeight:900,color:s.c,fontFamily:"'DM Mono',monospace",marginBottom:6}}>{s.n}</div><div style={{fontSize:15,fontWeight:700,color:C.text,marginBottom:8}}>{s.t}</div><p style={{fontSize:13,color:C.muted,lineHeight:1.7}}>{s.d}</p></div>))}
-</div>
-<div style={{background:C.card,borderRadius:16,padding:"40px 32px",border:`1px solid ${C.border}`,textAlign:"center",maxWidth:600,margin:"0 auto"}}><div style={{fontSize:10,fontWeight:700,letterSpacing:"0.15em",textTransform:"uppercase",color:C.green,marginBottom:16}}>What You Need</div>{["Current rate sheets from your lenders","Dealer participation agreements","Your store markup policy","One F&I manager for the first week"].map(s=>(<div key={s} style={{fontSize:14,color:C.muted,padding:"6px 0"}}>{s}</div>))}<div style={{marginTop:6,fontSize:12,color:C.dim}}>No IT. No DMS. No hardware required.</div><a href="mailto:hello@dealoptima.com" className="cta cta-p" style={{marginTop:24}}>Request a Demo →</a><div style={{fontSize:11,color:C.dim,marginTop:12}}>We respond within one business day. No spam, ever.</div></div>
-</Sec>
-
-{/* FOOTER */}
-
-<footer style={{borderTop:`1px solid ${C.border}`,padding:"48px 20px"}}>
-<div style={{maxWidth:1200,margin:"0 auto",textAlign:"center",marginBottom:40}}><p style={{fontSize:16,fontFamily:"Georgia,serif",color:C.muted}}>Every other tool helps you find a lender.</p><p style={{fontSize:16,fontFamily:"Georgia,serif",fontWeight:700,color:C.text,marginTop:6}}>DealOptima gives you the right one.</p><p style={{fontSize:16,fontFamily:"Georgia,serif",fontWeight:700,color:C.gold,marginTop:6}}>Structured correctly. Every deal.</p></div>
-<div style={{maxWidth:1200,margin:"0 auto",borderTop:`1px solid ${C.border}`,paddingTop:24,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:20}}>
-<div style={{display:"flex",alignItems:"center",gap:10}}><div style={{width:28,height:28,background:"linear-gradient(135deg,#D4A843,#B8860B)",clipPath:"polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:8,fontWeight:900,color:"#030712"}}>DO</div><span style={{fontFamily:"Georgia,serif",fontWeight:700,fontSize:16}}><span style={{color:C.gold}}>D</span>eal<span style={{color:C.gold}}>O</span>ptima</span></div>
-<div style={{display:"flex",gap:24,flexWrap:"wrap"}}><a href="#platform" className="nav-link">Platform</a><a href="#features" className="nav-link">Features</a><a href="#pricing" className="nav-link">Pricing</a><a href="mailto:hello@dealoptima.com" className="nav-link">hello@dealoptima.com</a></div>
-<div style={{fontSize:12,color:C.dim}}>© 2026 DealOptima. All rights reserved.</div>
+<div style="max-width:1200px;margin:0 auto;border-top:1px solid var(--border);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px">
+  <div style="display:flex;align-items:center;gap:10px"><div class="hex" style="width:28px;height:28px;font-size:8px">DO</div><span class="serif" style="font-weight:700;font-size:16px"><span style="color:var(--gold)">D</span>eal<span style="color:var(--gold)">O</span>ptima</span></div>
+  <div style="display:flex;gap:24px;flex-wrap:wrap"><a href="#platform" class="nav-link">Platform</a><a href="#features" class="nav-link">Features</a><a href="#pricing" class="nav-link">Pricing</a><a href="mailto:hello@dealoptima.com" class="nav-link">hello@dealoptima.com</a></div>
+  <div style="font-size:12px;color:var(--dim)">© 2026 DealOptima. All rights reserved.</div>
 </div>
 </footer>
 
-</div>);
+<script>
+// Nav scroll effect
+window.addEventListener('scroll',()=>{document.getElementById('nav').classList.toggle('scrolled',window.scrollY>50)});
+
+// Helper: create feature card HTML
+function fc(num,title,desc,color){
+  return `<div class="fc" onmouseenter="this.style.borderColor='${color}40'" onmouseleave="this.style.borderColor='var(--border)'"><div class="fc-bar" style="background:linear-gradient(90deg,${color},transparent 70%)"></div><div class="fc-head"><span class="fc-num mono" style="color:${color}">${num}</span><span class="fc-title">${title}</span></div><p class="fc-desc">${desc}</p></div>`;
 }
 
-const root = ReactDOM.createRoot(document.getElementById(‘root’));
-root.render(<DealOptimaSite />);
+// Problem cards
+document.getElementById('problem-cards').innerHTML=[
+{t:"Reserve Formula Wrong",d:"Every lender calculates differently — your manager uses one formula for all of them. Wrong by $300–$600 per deal.",c:"var(--red)"},
+{t:"Wrong Lender Called First",d:"720 FICO at 115% LTV goes to OZK, not Fifth Third. Without the matrix, your team calls alphabetically.",c:"var(--orange)"},
+{t:"No Live DTI / PTI Check",d:"48% DTI passes at Medallion but kills the deal at BofA. Your team finds out after the hard pull.",c:"var(--gold)"},
+{t:"Rate Sheets Running Stale",d:"Your desk is running last quarter's numbers on today's deals. Programs change monthly — your tool should too.",c:"var(--blue)"}
+].map(p=>`<div class="card" style="position:relative;overflow:hidden"><div style="position:absolute;top:0;left:0;width:4px;height:100%;background:${p.c}"></div><div style="font-size:16px;font-weight:700;margin-bottom:10px;padding-left:8px">${p.t}</div><p style="font-size:13px;color:var(--muted);line-height:1.7;padding-left:8px">${p.d}</p></div>`).join('');
+
+// Architecture
+document.getElementById('arch-section').innerHTML=`
+<div>
+<div style="font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--violet);margin-bottom:14px">What Goes In</div>
+${[{t:"700Credit Soft Pull",d:"Customer scans QR. 20 scoring fields auto-fill.",c:"var(--violet)"},{t:"Inventory Feed",d:"Stock # auto-pulls year, make, model, mileage.",c:"var(--blue)"},{t:"F&I Manual Entry",d:"Sale price, invoice, trade, down. 5 fields, 10 seconds.",c:"var(--orange)"}].map(i=>`<div style="background:var(--card);border-radius:10px;padding:14px 16px;margin-bottom:8px;border-left:3px solid ${i.c}"><div style="font-size:12px;font-weight:700;color:${i.c}">${i.t}</div><div style="font-size:11px;color:var(--muted);margin-top:4px">${i.d}</div></div>`).join('')}
+</div>
+<div style="background:var(--card);border-radius:16px;padding:28px 24px;border:1px solid rgba(212,168,67,0.19);position:relative"><div style="position:absolute;top:0;left:0;right:0;height:3px;background:var(--gold)"></div><div style="font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);text-align:center;margin-bottom:6px">DealOptima</div><div style="font-size:18px;font-weight:700;text-align:center;margin-bottom:16px">The Decision Engine</div>
+${[{t:"Scores every lender simultaneously",c:"var(--blue)"},{t:"Exact reserve per formula type",c:"var(--gold)"},{t:"Flags bad structure before submission",c:"var(--red)"},{t:"Ranks by profit, payment, or approval",c:"var(--green)"},{t:"Rate buydown cost to the penny",c:"var(--orange)"},{t:"Per-lender term control",c:"var(--teal)"},{t:"Learns from every logged outcome",c:"var(--violet)"}].map(a=>`<div style="padding:7px 12px;background:${a.c}0A;border-radius:6px;margin-bottom:4px;font-size:12px;color:${a.c};font-weight:600">${a.t}</div>`).join('')}
+<div style="margin-top:14px;padding:8px 12px;background:rgba(52,211,153,0.06);border-radius:8px;text-align:center"><span style="font-size:10px;font-weight:700;color:var(--green)">NO SSN · NO DOB · NO NAME · NO ADDRESS</span></div>
+</div>
+<div>
+<div style="font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--green);margin-bottom:14px">What Comes Out</div>
+<div style="background:var(--card);border-radius:10px;padding:14px 16px;border-left:3px solid var(--green)"><div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:6px">The Answer</div>${["Which lender wins","What rate to sell at","Exact reserve dollar","Payment at every term","What you leave on the table","Deal Doctor if no one qualifies","Stip list for the winning lender"].map(s=>`<div style="font-size:11px;color:var(--muted);padding:3px 0">• ${s}</div>`).join('')}</div>
+<div style="background:var(--card);border-radius:10px;padding:14px 16px;margin-top:8px;border-left:3px solid var(--orange)"><div style="font-size:12px;font-weight:700;color:var(--orange);margin-bottom:4px">F&I Manager Knows</div><div style="font-size:11px;color:var(--muted)">Submits in their CRM exactly like they do today. Zero workflow change.</div></div>
+</div>`;
+
+// Scoring cards
+document.getElementById('scoring-cards').innerHTML=`
+<div style="background:var(--card);border-radius:16px;padding:28px 24px;position:relative;overflow:hidden"><div style="position:absolute;top:0;left:0;right:0;height:3px;background:var(--blue)"></div><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--blue)">The Deal Structure Score</div><div style="font-size:16px;font-weight:700;margin-top:6px">How strong is this deal?</div></div><div class="mono" style="font-size:36px;font-weight:900;color:var(--blue)">78<span style="font-size:14px;color:var(--dim)">/100</span></div></div><p style="font-size:13px;color:var(--muted);line-height:1.7;margin-top:14px">Before a single lender is evaluated, the deal gets a health rating. LTV, DTI, down payment, FICO tier, credit depth, collections, housing — every factor weighted into one number.</p><p style="font-size:13px;color:var(--muted);line-height:1.7;margin-top:10px">A 92 means most lenders will fight for it. A 54 means structural problems. The Deal Doctor reads this score and tells you exactly what to change.</p><div style="font-size:12px;font-weight:700;color:var(--blue);font-style:italic;margin-top:16px">Visible to your F&I manager on every deal.</div></div>
+<div style="background:var(--card);border-radius:16px;padding:28px 24px;position:relative;overflow:hidden"><div style="position:absolute;top:0;left:0;right:0;height:3px;background:var(--gold)"></div><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold)">The Lender Match Score</div><div style="font-size:16px;font-weight:700;margin-top:6px">How well does this deal fit each bank?</div></div><div class="mono" style="font-size:36px;font-weight:900;color:var(--gold)">91<span style="font-size:14px;color:var(--dim)">/100</span></div></div><p style="font-size:13px;color:var(--muted);line-height:1.7;margin-top:14px">Each lender gets its own 0–100 composite score. FICO fit, LTV tolerance, DTI threshold, mileage cap, reserve opportunity — all weighted per lender.</p><p style="font-size:13px;color:var(--muted);line-height:1.7;margin-top:10px">OZK scores 91 because LTV and FICO land in their sweet spot. Fifth Third scores 64 because their DTI threshold is tighter. The ranking isn't alphabetical — it's mathematical.</p><div style="font-size:12px;font-weight:700;color:var(--gold);font-style:italic;margin-top:16px">Every lender ranked. Highest score = best path.</div></div>`;
+
+// Features
+const feats={
+"Scoring & Intelligence":{color:"var(--gold)",items:[
+["01","Proprietary Dual Scoring","Every deal gets a Structure Score (how strong is the deal?) and every lender gets a Match Score (how well does it fit?). Both 0–100, 25+ weighted signals. Highest score = best path.","var(--gold)"],
+["02","25+ Bureau Signals Weighted","Not just FICO. Utilization, inquiries, collections, derogs, years in file, housing status — each signal shows its exact point impact with an underwriter-level explanation.","var(--violet)"],
+["03","Three Sort Modes","Max Profit ranks by reserve + F&I gross combined. Lowest Payment ranks by buy rate. Best Approval ranks by odds. One tap to switch — rankings update instantly across all lenders.","var(--blue)"],
+["04","Deal Health Monitor","A live 0–100 score visible in the header on every deal. Green means clean structure. Red means problems. Updates as you change any input — before you look at a single lender.","var(--green)"],
+["05","Outcome Intelligence System","Six outcomes — Approved, Countered, Declined, Funded, Conditional, Withdrawn. Submit-first flow: only lenders you actually called get logged. 15 seconds per outcome. The engine learns from every one.","var(--teal)"]]},
+"Reserve & Rate Tools":{color:"var(--blue)",items:[
+["06","Reserve to the Dollar","Every lender has its own formula — base plus spread, flat percent, tiered flat, spread only. The system knows which applies and calculates your exact reserve. Custom formulas for any dealer agreement.","var(--gold)"],
+["07","Rate Override Slider","Drag the sell rate and watch reserve, payment, total gross, and 'left on table' update live. See the exact cost of every concession before you make it. Per lender, per deal.","var(--teal)"],
+["08","Buydown Table","Full table: every 0.25% step from max sell rate down to buy rate. Reserve sacrificed, payment reduction, and cost-per-dollar of monthly payment saved. Most efficient step highlighted.","var(--violet)"],
+["09","Reverse Payment Calculator","Customer says '$650/mo.' You're at $724. Enter $650 — system shows exactly how much more down at each available term to hit the target. One number in, every answer out.","var(--blue)"],
+["10","Per-Lender Term Control","Each lender card has its own term pills — tap 144, 180, 216, 240 and see that bank's payment update instantly. Compare terms per bank without touching the others. Global override still available.","var(--green)"]]},
+"Deal Structure & Compliance":{color:"var(--teal)",items:[
+["11","Live DTI · PTI · LTV","Every ratio updates live, color-coded red/yellow/green against each lender's actual thresholds. 48% DTI passes at Medallion but kills the deal at BofA — you see it before the bank does.","var(--blue)"],
+["12","Front-End / Backend / Total LTV","Three separate LTV checks per lender — front-end cap (unit only), backend allowance (F&I products as % of invoice), and total combined ceiling. Know exactly where you're over and why.","var(--gold)"],
+["13","F&I Product Intelligence","Load GAP, warranty, service contracts, paint protection. The system recalculates every lender's backend LTV against their max percentage of invoice. See which lenders accept your full product stack.","var(--green)"],
+["14","Down Payment Intelligence","Each lender has different minimums based on FICO, loan amount, and program tier. The system shows exactly how short you are per lender and what additional down unlocks each one.","var(--orange)"],
+["15","Mileage Intelligence","BofA caps at 50K gas / 100K diesel. OZK allows 75K / 150K. M&T tops at 40K. Enter the mileage, toggle gas or diesel, and watch your lender book respond instantly.","var(--teal)"],
+["16","High Credit Exposure Flag","Financing $82K when the customer's highest prior credit is $28K? That's a 2.9x exposure ratio. The system flags it and shows which lenders care about that metric.","var(--red)"]]},
+"Lender Program Intelligence":{color:"var(--orange)",items:[
+["17","Deal Doctor","No qualifying lenders? The system shows the exact structural move — '$2,100 more down unlocks OZK' or '20 points higher FICO opens Fifth Third at 7.49%.' Dollar amounts, not guesses.","var(--orange)"],
+["18","FICO Gap Badge","Sitting at 738 FICO? The system shows '2 points to 740 tier → 0.25% lower buy rate at OZK.' Per lender, per tier boundary. Your F&I manager sees exactly what one score bump is worth.","var(--blue)"],
+["19","Acceptance Rules Engine","Toggle BK on — 12 lenders disappear, 2 remain. Toggle repo — score caps at 45. Every flag shows exactly who accepts, who exits, and what the conditions are.","var(--red)"],
+["20","Program Notes + Stips","Full program notes and stip requirements for every lender, one tap from the result card. Colony requires POI on all apps over $100K. Fifth Third needs FFD on front-end advances. No more calling the rep.","var(--gold)"],
+["21","Co-Signer Support","Add a co-borrower with their own FICO score. The system recalculates approval odds using the stronger borrower where applicable. Shows the exact point boost per lender.","var(--violet)"],
+["22","Prior RV / Auto Loan Detection","Some lenders reward prior RV or auto loan history with better approval odds. Toggle it on and watch those lenders get a score boost. The system knows which banks care.","var(--green)"]]},
+"Desk & Workflow":{color:"var(--green)",items:[
+["23","FastPass Desk Check","The sales desk needs a quick answer before the customer sits down in F&I. Enter FICO, income, sale price, down — get a pre-screen in seconds. Separate tab, simplified view.","var(--green)"],
+["24","Save / Load / Manage Deals","Every deal saved with full snapshot — structure, results, outcomes, products. Load any previous deal instantly. Compare results over time. Deal history is searchable by stock number.","var(--blue)"],
+["25","Deal ID System","Every deal gets a unique ID (DO-2026-0001) visible in the header. Track deals by number across your team. When the backend connects, this becomes your deal ledger.","var(--gold)"],
+["26","Stock # / VIN Identification","Deals identified by stock number and VIN — not customer name. When inventory feed connects in Pro, stock # auto-fills year, make, model, mileage. Manual entry works today.","var(--teal)"],
+["27","Gas / Diesel Toggle","One toggle changes every lender's mileage cap simultaneously. BofA goes from 50K to 100K. OZK goes from 75K to 150K. The entire lender book recalculates for the fuel type.","var(--orange)"]]}
+};
+let fhtml='';
+for(const[cat,data] of Object.entries(feats)){
+  fhtml+=`<div style="font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:${data.color};margin-bottom:14px">${cat}</div><div class="g-feat" style="margin-bottom:36px">${data.items.map(f=>fc(f[0],f[1],f[2],f[3])).join('')}</div>`;
+}
+document.getElementById('features-grid').innerHTML=fhtml;
+
+// Showcase
+document.getElementById('showcase-content').innerHTML=`
+<div class="g-show" style="margin-bottom:80px">
+<div><div style="font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--teal);margin-bottom:10px">Per-Lender Term Control</div><h3 style="font-size:24px;font-weight:700;margin-bottom:12px">Compare Payments Per Bank. Instantly.</h3><p style="font-size:14px;color:var(--muted);line-height:1.7">Each lender card has its own term pills. Tap 180mo on OZK and see $674/mo. Same deal at 240mo shows $562/mo. The other lenders stay where they are. Global override still available when you want to force one term across all lenders.</p></div>
+<div style="display:flex;justify-content:center"><div class="mock" id="mock-terms"></div></div>
+</div>
+<div class="g-show">
+<div style="display:flex;justify-content:center"><div class="mock" id="mock-outcome"></div></div>
+<div><div style="font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--blue);margin-bottom:10px">Outcome Intelligence System</div><h3 style="font-size:24px;font-weight:700;margin-bottom:12px">Every Outcome Teaches the Engine.</h3><p style="font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:12px">Submit to a lender. Log the result. Six outcomes — Approved, Countered, Declined, Funded, Conditional, Withdrawn — each capturing the exact data that makes the next deal smarter.</p><p style="font-size:14px;color:var(--muted);line-height:1.7">After 200 deals, the system predicts approval probability, estimated buy rate, and counter likelihood before you pick up the phone.</p></div>
+</div>`;
+
+// Mock term pills
+document.getElementById('mock-terms').innerHTML=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><div style="width:32px;height:32px;border-radius:8px;background:rgba(96,165,250,0.15);border:1px solid rgba(96,165,250,0.3);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;color:#60A5FA" class="mono">OZK</div><div><div style="font-size:13px;font-weight:700">Bank OZK</div><div style="font-size:9px;color:var(--muted)">5.99% buy · $2,840 reserve</div></div></div><div style="font-size:7px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--dim);margin-bottom:5px">Term at OZK</div><div style="display:flex;gap:4px;margin-bottom:12px">${[{t:"Auto",p:null,a:false},{t:"144mo",p:"$782",a:false},{t:"180mo",p:"$674",a:true},{t:"216mo",p:"$602",a:false},{t:"240mo",p:"$562",a:false}].map(t=>`<div style="padding:4px 8px;border-radius:6px;border:1px solid ${t.a?'rgba(45,212,191,0.5)':'var(--border)'};background:${t.a?'rgba(45,212,191,0.08)':'rgba(255,255,255,0.02)'};text-align:center;min-width:48px"><div style="font-size:8px;font-weight:700;color:${t.a?'var(--teal)':'var(--muted)'}">${t.t}</div>${t.p?`<div class="mono" style="font-size:10px;font-weight:700;color:${t.a?'var(--text)':'var(--dim)'};margin-top:1px">${t.p}</div>`:''}</div>`).join('')}</div><div style="display:grid;grid-template-columns:repeat(5,1fr);gap:5px">${[{l:"Financed",v:"$82,400"},{l:"LTV",v:"108%"},{l:"Payment",v:"$674/mo",c:"var(--teal)"},{l:"DTI",v:"38%",c:"var(--gold)"},{l:"PTI",v:"14%",c:"var(--green)"}].map(s=>`<div style="text-align:center;padding:6px 2px;background:rgba(255,255,255,0.02);border-radius:6px;border:1px solid var(--border)"><div style="font-size:6px;letter-spacing:0.08em;text-transform:uppercase;color:var(--dim)">${s.l}</div><div class="mono" style="font-size:10px;font-weight:700;color:${s.c||'var(--muted)'}">${s.v}</div></div>`).join('')}</div>`;
+
+// Mock outcome
+document.getElementById('mock-outcome').innerHTML=`<div style="font-size:7px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--blue);margin-bottom:8px">Outcome Intelligence — Log Bank Response</div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-bottom:10px">${[{i:"✅",n:"Approved",c:"var(--green)"},{i:"↩",n:"Countered",c:"var(--gold)"},{i:"❌",n:"Declined",c:"var(--red)"},{i:"💰",n:"Funded",c:"var(--teal)"},{i:"📋",n:"Conditional",c:"var(--blue)"},{i:"⏸",n:"Withdrawn",c:"var(--muted)"}].map(o=>`<div style="padding:6px 4px;border-radius:6px;border:1px solid var(--border);background:rgba(255,255,255,0.02);text-align:center"><div style="font-size:12px">${o.i}</div><div style="font-size:7px;font-weight:700;color:${o.c};margin-top:1px">${o.n}</div></div>`).join('')}</div><div style="background:rgba(52,211,153,0.06);border:1px solid rgba(52,211,153,0.2);border-radius:8px;padding:8px 10px;margin-bottom:8px"><div style="font-size:9px;font-weight:700;color:var(--green)">✅ Approved</div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:6px">${[{l:"Buy Rate",v:"5.74%"},{l:"Amount",v:"$82,400"},{l:"Term",v:"240mo"}].map(f=>`<div><div style="font-size:6px;color:var(--dim);text-transform:uppercase;letter-spacing:0.08em">${f.l}</div><div class="mono" style="font-size:11px;font-weight:700">${f.v}</div></div>`).join('')}</div></div><div style="display:flex;gap:4px">${[{l:"Avg Buy: 5.62%",c:"var(--teal)"},{l:"Counters 60%",c:"var(--gold)"},{l:"Top: DTI",c:"var(--red)"}].map(b=>`<div class="mono" style="font-size:7px;padding:3px 6px;border-radius:4px;background:rgba(255,255,255,0.03);border:1px solid var(--border);color:${b.c}">${b.l}</div>`).join('')}</div>`;
+
+// AI Tiers
+document.getElementById('ai-tiers').innerHTML=[
+{tier:"Tier 1",title:"Lender-Level Outcome Learning",tag:"Active Now",tagC:"var(--green)",c:"var(--green)",desc:"Every logged outcome feeds directly into the scoring algorithm. Approved and funded deals boost the lender's score +20 for matching profiles. Declines drop it −15. After 30 deals, rankings reflect YOUR lenders' real behavior — not published guidelines."},
+{tier:"Tier 2",title:"Signal Weight Recalibration",tag:"100+ Outcomes",tagC:"var(--orange)",c:"var(--orange)",desc:"The 25 scoring signals recalibrate per store using real outcome data. If Colony declines 8 deals citing DTI, the DTI penalty increases specifically for Colony at your store. Counter patterns teach the system where to tighten structure before submission."},
+{tier:"Tier 3",title:"Multi-Rooftop Group Intelligence",tag:"Enterprise",tagC:"var(--violet)",c:"var(--violet)",desc:"For dealer groups under one owner. Store A's outcome data benefits Store B — because it's the same company. Colony tightened at your Tampa store? Your Orlando store sees it instantly. Your data never leaves your group. Competitors see nothing."}
+].map(t=>`<div class="card" style="margin-bottom:16px;position:relative;overflow:hidden"><div style="position:absolute;top:0;left:0;width:4px;height:100%;background:${t.c}"></div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;padding-left:8px"><div style="display:flex;align-items:center;gap:12px"><span style="font-size:11px;font-weight:800;color:${t.c};letter-spacing:0.1em">${t.tier}</span><span style="font-size:16px;font-weight:700">${t.title}</span></div><span style="font-size:9px;font-weight:800;color:${t.tagC};letter-spacing:0.15em;text-transform:uppercase">${t.tag}</span></div><p style="font-size:13px;color:var(--muted);line-height:1.7;padding-left:8px">${t.desc}</p></div>`).join('');
+
+// Security
+document.getElementById('security-cols').innerHTML=`
+<div class="card"><div style="font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--green);margin-bottom:14px">What We Store</div>${["Stock # + Deal ID","Exact FICO score (718, not a range)","All 25 weighted credit signals","Exact LTV, DTI, PTI ratios","Deal structure (price, invoice, trade, down)","Lender selected + approval outcome","Reserve earned + amount left on table"].map(s=>`<div style="font-size:13px;color:var(--muted);padding:5px 0">● ${s}</div>`).join('')}</div>
+<div class="card"><div style="font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--red);margin-bottom:14px">What We Never Store</div>${["Customer name","Social Security Number","Date of birth","Home address or phone number","Raw 700Credit bureau file","Bank account numbers","Nothing that identifies a human being"].map(s=>`<div style="font-size:13px;color:var(--muted);padding:5px 0">✕ ${s}</div>`).join('')}</div>`;
+document.getElementById('security-badges').innerHTML=[{t:"AES-256",d:"Encrypted at rest"},{t:"TLS 1.3",d:"Encrypted in transit"},{t:"Row-Level",d:"Store A ≠ Store B"},{t:"SOC 2",d:"AWS / Supabase"}].map(s=>`<div style="text-align:center;padding:16px 12px;background:var(--card);border-radius:10px;border:1px solid var(--border)"><div class="mono" style="font-size:18px;font-weight:800;color:var(--teal)">${s.t}</div><div style="font-size:10px;color:var(--muted);margin-top:4px">${s.d}</div></div>`).join('');
+
+// Pricing
+function pricingList(items,color){return items.map(i=>`<div style="display:flex;align-items:flex-start;gap:8px"><div style="width:4px;height:4px;border-radius:50%;background:${color};flex-shrink:0;margin-top:7px"></div><span style="font-size:12px;color:var(--muted);line-height:1.5">${i}</span></div>`).join('');}
+document.getElementById('pricing-cards').innerHTML=`
+<div style="background:var(--card);border-radius:20px;padding:36px 28px;border:1px solid var(--border);display:flex;flex-direction:column"><div style="font-size:9px;font-weight:800;letter-spacing:0.2em;text-transform:uppercase;color:var(--green);margin-bottom:10px">Available Now</div><div style="font-size:22px;font-weight:700;margin-bottom:4px">DealOptima Core</div><div class="mono" style="font-size:36px;font-weight:900;color:var(--green)">$299</div><div style="font-size:12px;color:var(--muted);margin-bottom:4px">/mo per store</div><div style="font-size:11px;color:var(--green);font-style:italic;margin-bottom:24px">No login required. One link. Start today.</div><div style="flex:1;display:flex;flex-direction:column;gap:8px">${pricingList(["Proprietary 25+ signal scoring","Unlimited lender programs","Reserve calc — every formula type","Live DTI · PTI · LTV ratios","Rate slider + buydown table","Reverse payment calculator","Deal Doctor + acceptance rules","Per-lender term control","We configure your lenders","Ongoing program maintenance"],"var(--green)")}</div><a href="mailto:hello@dealoptima.com?subject=DealOptima%20Core%20Pilot%20Request" class="cta cta-p" style="width:100%;justify-content:center;margin-top:28px">Start Your Pilot</a></div>
+<div style="background:var(--card);border-radius:20px;padding:36px 28px;border:1px solid rgba(212,168,67,0.31);position:relative;display:flex;flex-direction:column"><div style="position:absolute;top:-1px;left:0;right:0;height:3px;background:var(--gold);border-radius:20px 20px 0 0"></div><div style="font-size:9px;font-weight:800;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:10px">Coming Soon</div><div style="font-size:22px;font-weight:700;margin-bottom:4px">DealOptima Pro</div><div class="mono" style="font-size:36px;font-weight:900;color:var(--gold)">$999–$1,499</div><div style="font-size:12px;color:var(--muted);margin-bottom:4px">/mo per store</div><div style="font-size:11px;color:var(--gold);font-style:italic;margin-bottom:24px">Tiered by 90-day rolling car volume.</div><div style="flex:1;display:flex;flex-direction:column;gap:8px">${pricingList(["Everything in Core","700Credit soft pull built-in","Cloud backend — persistent data","Inventory feed API","Up to 10 users (GM + F&I + desk)","Outcome logging + AI learning","F&I Scoreboard + GM dashboard","Counter rate intelligence","Reserve capture reporting"],"var(--gold)")}</div><a href="mailto:hello@dealoptima.com?subject=DealOptima%20Pro%20Waitlist" class="cta" style="width:100%;justify-content:center;margin-top:28px;border:1px solid rgba(212,168,67,0.25);color:var(--gold);background:transparent">Join the Waitlist</a></div>
+<div style="background:var(--card);border-radius:20px;padding:36px 28px;border:1px solid var(--border);display:flex;flex-direction:column"><div style="font-size:9px;font-weight:800;letter-spacing:0.2em;text-transform:uppercase;color:var(--violet);margin-bottom:10px">The Full Vision</div><div style="font-size:22px;font-weight:700;margin-bottom:4px">Enterprise</div><div class="mono" style="font-size:36px;font-weight:900;color:var(--violet)">$1,999+</div><div style="font-size:12px;color:var(--muted);margin-bottom:4px">/mo · multi-store groups</div><div style="font-size:11px;color:var(--violet);font-style:italic;margin-bottom:24px">Unlimited users. Custom pricing.</div><div style="flex:1;display:flex;flex-direction:column;gap:8px">${pricingList(["Everything in Pro","Unlimited users per store","Multi-store admin dashboard","Group-wide AI intelligence","Rate sheet PDF parser (AI)","Natural language deal Q&A","Dedicated account manager","Shared learning across rooftops","White-glove onboarding"],"var(--violet)")}</div><a href="mailto:hello@dealoptima.com?subject=DealOptima%20Enterprise%20Inquiry" class="cta" style="width:100%;justify-content:center;margin-top:28px;border:1px solid rgba(167,139,250,0.25);color:var(--violet);background:transparent">Contact Sales</a></div>`;
+
+// Steps
+document.getElementById('steps-grid').innerHTML=[
+{n:"01",t:"Send Us Your Rate Sheets",d:"PDFs, photos, emails — however you have them. Current programs from every lender in your book.",c:"var(--green)"},
+{n:"02",t:"We Build Your Engine",d:"Every lender configured with the correct reserve formula, rate tiers, LTV caps, DTI thresholds, and stip requirements.",c:"var(--blue)"},
+{n:"03",t:"Your Link Goes Live",d:"One dedicated URL for your store. Open on any device. No install. No login. Bookmark it and start running deals.",c:"var(--gold)"},
+{n:"04",t:"We Maintain It",d:"Lender programs change constantly. When they do, we update your engine and redeploy. That's included — not an add-on.",c:"var(--violet)"}
+].map(s=>`<div class="card" style="position:relative;overflow:hidden"><div style="position:absolute;top:0;left:0;right:0;height:2px;background:${s.c}"></div><div class="mono" style="font-size:20px;font-weight:900;color:${s.c};margin-bottom:6px">${s.n}</div><div style="font-size:15px;font-weight:700;margin-bottom:8px">${s.t}</div><p style="font-size:13px;color:var(--muted);line-height:1.7">${s.d}</p></div>`).join('');
+
+// Demo box
+document.getElementById('demo-box').innerHTML=`<div style="font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--green);margin-bottom:16px">What You Need</div>${["Current rate sheets from your lenders","Dealer participation agreements","Your store markup policy","One F&I manager for the first week"].map(s=>`<div style="font-size:14px;color:var(--muted);padding:6px 0">${s}</div>`).join('')}<div style="margin-top:6px;font-size:12px;color:var(--dim)">No IT. No DMS. No hardware required.</div><a href="mailto:hello@dealoptima.com" class="cta cta-p" style="margin-top:24px">Request a Demo →</a><div style="font-size:11px;color:var(--dim);margin-top:12px">We respond within one business day. No spam, ever.</div>`;
+
+// Hero mock
+document.getElementById('hero-mock').innerHTML=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:14px"><div class="hex" style="width:22px;height:22px;font-size:6px">DO</div><span class="mono" style="font-size:10px;font-weight:700;color:var(--gold)">DO-2026-0047</span><span class="mono" style="font-size:8px;color:var(--muted)">#STK-20847</span><div style="margin-left:auto;display:flex;align-items:center;gap:4px"><div style="width:6px;height:6px;border-radius:50%;background:var(--green)"></div><span class="mono" style="font-size:10px;font-weight:700;color:var(--green)">82</span></div></div><div style="font-size:7px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:6px">Live Scoring — All Lenders</div>${[{n:"53",s:91,c:"#4ADE80"},{n:"OZK",s:87,c:"#60A5FA"},{n:"BofA",s:72,c:"#F87171"},{n:"BMO",s:68,c:"#FB923C"},{n:"USB",s:64,c:"#38BDF8"},{n:"M&T",s:58,c:"#86EFAC"},{n:"Colony",s:45,c:"#C084FC"}].map(l=>`<div class="mock-bar"><span class="mono" style="font-size:9px;font-weight:800;color:${l.c};width:34px">${l.n}</span><div style="flex:1;height:5px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden"><div class="mock-fill" style="width:0%;background:linear-gradient(90deg,${l.c},${l.c}88)" data-target="${l.s}"></div></div><span class="mono" style="font-size:9px;font-weight:700;color:${l.c};width:22px;text-align:right">${l.s}</span></div>`).join('')}<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:12px">${[{l:"Reserve",v:"$2,840",c:"var(--blue)"},{l:"Payment",v:"$674/mo",c:"var(--text)"},{l:"Gross",v:"$4,120",c:"var(--green)"}].map(s=>`<div style="text-align:center;padding:7px 4px;background:rgba(255,255,255,0.03);border-radius:7px;border:1px solid var(--border)"><div style="font-size:6px;letter-spacing:0.1em;text-transform:uppercase;color:var(--dim)">${s.l}</div><div class="mono" style="font-size:12px;font-weight:700;color:${s.c}">${s.v}</div></div>`).join('')}</div>`;
+
+// Animate bars
+setTimeout(()=>{document.querySelectorAll('.mock-fill').forEach(el=>{el.style.width=el.dataset.target+'%'})},500);
 </script>
 
 </body>
